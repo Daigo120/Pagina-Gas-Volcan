@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand fw-bold text-warning" href="admin.html">🌋 Mantenedor de Productos</a>
+                <a class="navbar-brand fw-bold text-warning" href="admin.html"> Mantenedor de Productos</a>
                 <a href="admin.html" class="btn btn-outline-light btn-sm">Volver al Panel</a>
             </div>
         </nav>
@@ -35,31 +35,100 @@
                 </tr>
             </thead>
             <tbody id="tabla-admin-productos">
-                <!-- Se llena automáticamente vía datos.js -->
+                
             </tbody>
         </table>
     </main>
 
     <script src="js/datos.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const tbody = document.getElementById("tabla-admin-productos");
-            productosGas.forEach(p => {
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tbody = document.getElementById("tabla-admin-productos");
+
+       
+        function renderizarTabla() {
+            tbody.innerHTML = "";
+            productosGas.forEach((p, index) => {
                 tbody.innerHTML += `
                     <tr>
                         <td>${p.codigo}</td>
                         <td>${p.categoria}</td>
-                        <td>${p.nombre}</td>
+                        <td><strong>${p.nombre}</strong></td>
                         <td>$${p.precioResidencial.toLocaleString("es-CL")}</td>
-                        <td>${p.stock}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="modificarStock(${index}, -1)">-</button>
+                                <span class="fw-bold">${p.stock}</span>
+                                <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="modificarStock(${index}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm me-1" onclick="editarProducto(${index})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button>
                         </td>
                     </tr>
                 `;
             });
-        });
-    </script>
+        }
+
+        
+        window.modificarStock = (index, cambio) => {
+            if (productosGas[index].stock + cambio >= 0) {
+                productosGas[index].stock += cambio;
+                renderizarTabla();
+            }
+        };
+
+       
+        window.editarProducto = (index) => {
+            const prod = productosGas[index];
+            const nuevoNombre = prompt("Nuevo nombre del producto:", prod.nombre);
+            const nuevoPrecio = prompt("Nuevo precio residencial:", prod.precioResidencial);
+
+            if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
+                prod.nombre = nuevoNombre.trim();
+            }
+            if (nuevoPrecio !== null && !isNaN(nuevoPrecio) && nuevoPrecio > 0) {
+                prod.precioResidencial = Number(nuevoPrecio);
+            }
+            renderizarTabla();
+        };
+
+       
+        window.eliminarProducto = (index) => {
+            if (confirm(`¿Estás seguro de eliminar el producto "${productosGas[index].nombre}"?`)) {
+                productosGas.splice(index, 1);
+                renderizarTabla();
+            }
+        };
+
+        
+        const btnNuevo = document.querySelector(".btn-success");
+        if (btnNuevo) {
+            btnNuevo.addEventListener("click", () => {
+                const codigo = prompt("Ingrese Código (Ej: G15):");
+                const categoria = prompt("Ingrese Categoría (Ej: Cilindros):");
+                const nombre = prompt("Ingrese Nombre del Producto:");
+                const precio = prompt("Ingrese Precio Residencial:");
+                const stock = prompt("Ingrese Stock Inicial:");
+
+                if (codigo && categoria && nombre && !isNaN(precio) && !isNaN(stock)) {
+                    productosGas.push({
+                        codigo: codigo.toUpperCase(),
+                        categoria: categoria,
+                        nombre: nombre,
+                        precioResidencial: Number(precio),
+                        stock: Number(stock)
+                    });
+                    renderizarTabla();
+                } else {
+                    alert("Datos inválidos o incompletos.");
+                }
+            });
+        }
+
+        renderizarTabla();
+    });
+</script>
 </body>
 </html>

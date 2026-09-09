@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand fw-bold text-warning" href="index.html">🌋 Gas El Volcán</a>
+                <a class="navbar-brand fw-bold text-warning" href="index.html">Gas El Volcán</a>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
@@ -26,32 +26,42 @@
     <main class="container my-5">
         <h2 class="fw-bold mb-4">Catálogo de Productos y Soluciones de Gas</h2>
         <div class="row">
-            <!-- Columna de Productos -->
+           
             <div class="col-lg-8">
                 <div class="row" id="contenedor-productos">
-                    <!-- Los productos se cargan dinámicamente con JavaScript -->
+                  
                 </div>
             </div>
 
-            <!-- Columna de Carrito de Compras -->
+            
             <div class="col-lg-4">
                 <div class="card shadow-sm sticky-top" style="top: 20px;">
                     <div class="card-header bg-dark text-white fw-bold">
-                        🛒 Mi Carrito de Compras
+                         Mi Carrito de Compras
                     </div>
                     <div class="card-body">
                         <ul class="list-group mb-3" id="lista-carrito">
-                            <!-- Items agregados en JS -->
+                          
                         </ul>
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fs-5">Total:</span>
                             <span class="fs-4 fw-bold text-success" id="total-carrito">$0</span>
                         </div>
-                        <button class="btn btn-success w-100 fw-bold">Finalizar Pedido</button>
+                        <button class="btn btn-success w-100 fw-bold" onclick="irAPagar()">Finalizar Pedido</button>
+
+                            <script>
+                                function irAPagar() {
+                               
+                                     window.location.href = "pago.html";
+                                        }
+                            </script>
                     </div>
                 </div>
             </div>
         </div>
+                        <div class="text-center mt-3">
+                            <a href="index.html" class="text-secondary small">Volver al Inicio</a>
+                        </div>
     </main>
 
     <footer class="text-white text-center py-4 mt-auto">

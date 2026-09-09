@@ -45,13 +45,20 @@
 
             const errores = validarLogin(correo, password);
             if (errores.length > 0) {
-                divErrores.innerHTML = errores.join("<br>");
+            divErrores.innerHTML = errores.join("<br>");
             } else {
                 divErrores.innerHTML = "";
-                alert("¡Inicio de sesión exitoso!");
-                window.location.href = "index.html";
-            }
-        });
+        
+       
+                if (correo === "admin@gmail.com" && password === "1234") {
+                    alert("¡Bienvenido Administrador!");
+                    window.location.href = "admin.html";
+                } else {
+                    alert("¡Inicio de sesión exitoso!");
+                    window.location.href = "index.html"; 
+        }
+    }
+});
     </script>
 </body>
 </html>

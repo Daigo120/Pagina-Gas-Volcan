@@ -11,37 +11,89 @@
     <header>
         <nav class="navbar navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand fw-bold text-warning" href="admin.html">🌋 Mantenedor de Usuarios</a>
+                <a class="navbar-brand fw-bold text-warning" href="admin.html"> Mantenedor de Usuarios</a>
                 <a href="admin.html" class="btn btn-outline-light btn-sm">Volver al Panel</a>
             </div>
         </nav>
     </header>
 
     <main class="container my-5">
-        <h3 class="mb-4">Usuarios Registrados</h3>
-        <table class="table table-bordered table-hover shadow-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>RUN</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Tipo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>12345678-9</td>
-                    <td>Juan Pérez</td>
-                    <td>juan.perez@email.cl</td>
-                    <td>Residencial</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm">Editar</button>
-                        <button class="btn btn-danger btn-sm">Bloquear</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
+    <h3 class="mb-4">Usuarios Registrados</h3>
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>RUN</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-admin-usuarios">
+           
+        </tbody>
+    </table>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        let usuarios = [
+            { run: "12345678-9", nombre: "Juan Pérez", correo: "juan.perez@email.cl", tipo: "Residencial", activo: true },
+            { run: "98765432-1", nombre: "María González", correo: "maria.g@email.cl", tipo: "Comercial", activo: true }
+        ];
+
+        const tbody = document.getElementById("tabla-admin-usuarios");
+
+        function renderizarUsuarios() {
+            tbody.innerHTML = "";
+            usuarios.forEach((u, index) => {
+                tbody.innerHTML += `
+                    <tr class="${!u.activo ? 'table-secondary text-muted' : ''}">
+                        <td>${u.run}</td>
+                        <td><strong>${u.nombre}</strong></td>
+                        <td>${u.correo}</td>
+                        <td>${u.tipo}</td>
+                        <td>
+                            <span class="badge ${u.activo ? 'bg-success' : 'bg-danger'}">
+                                ${u.activo ? 'Activo' : 'Bloqueado'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-1" onclick="editarUsuario(${index})">Editar</button>
+                            <button class="btn btn-${u.activo ? 'danger' : 'success'} btn-sm" onclick="toggleBloqueo(${index})">
+                                ${u.activo ? 'Bloquear' : 'Desbloquear'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+      
+        window.editarUsuario = (index) => {
+            const u = usuarios[index];
+            const nuevoNombre = prompt("Editar Nombre:", u.nombre);
+            const nuevoCorreo = prompt("Editar Correo:", u.correo);
+
+            if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
+                u.nombre = nuevoNombre.trim();
+            }
+            if (nuevoCorreo !== null && nuevoCorreo.trim() !== "") {
+                u.correo = nuevoCorreo.trim();
+            }
+            renderizarUsuarios();
+        };
+
+       
+        window.toggleBloqueo = (index) => {
+            usuarios[index].activo = !usuarios[index].activo;
+            renderizarUsuarios();
+        };
+
+        renderizarUsuarios();
+    });
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// Cargar tarjetas de productos en catálogo
+
 function cargarProductos() {
     const contenedor = document.getElementById("contenedor-productos");
     if (!contenedor) return;
@@ -22,7 +22,7 @@ function cargarProductos() {
     });
 }
 
-// Carrito de compras usando LocalStorage
+
 function agregarAlCarrito(codigo) {
     let carrito = JSON.parse(localStorage.getItem("carrito_gas")) || [];
     const producto = productosGas.find(p => p.codigo === codigo);
@@ -73,7 +73,7 @@ function eliminarDelCarrito(index) {
     renderizarCarrito();
 }
 
-// Selector Dinámico de Región y Comuna
+
 function inicializarRegionComunas() {
     const selectRegion = document.getElementById("select-region");
     const selectComuna = document.getElementById("select-comuna");
@@ -101,8 +101,18 @@ function inicializarRegionComunas() {
         }
     });
 }
+function irAPagar() {
+    
+    const totalTexto = document.getElementById("total-carrito").innerText;
 
-// Inicialización general al cargar la página
+   
+    localStorage.setItem("montoTotalPedido", totalTexto);
+
+   
+    window.location.href = "pago.html";
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     cargarProductos();
     renderizarCarrito();

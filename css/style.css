@@ -1,20 +1,20 @@
-/* Configuración general */
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #fafbfd;
     color: #333333;
 }
 
-/* Encabezado y Navbar */
+
 header nav {
-    border-bottom: 4px solid #00f35d;
+    border-bottom: 4px solid #fbff00;
 }
 
 .navbar-brand {
     font-size: 1.5rem;
 }
 
-/* Estilos de Tarjetas del Catálogo */
+
 .card-producto {
     border-radius: 10px;
     border: none;
@@ -34,14 +34,14 @@ header nav {
     object-fit: cover;
 }
 
-/* Formulario de Mensajes de Error */
+
 .error-message {
     color: #dc3545;
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
 
-/* Footer */
+
 footer {
     background-color: #212529;
 }

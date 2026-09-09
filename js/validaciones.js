@@ -1,4 +1,4 @@
-// Validación Módulo 11 para RUN Chileno
+
 function validarRUN(rutCompleto) {
     rutCompleto = rutCompleto.replace(/[^0-9kK]/g, '');
     if (rutCompleto.length < 8) return false;
@@ -22,7 +22,7 @@ function validarRUN(rutCompleto) {
     return dv === dvEsperado;
 }
 
-// Validar Formulario de Login (4 a 10 caracteres en contraseña, correo válido)
+
 function validarLogin(correo, password) {
     const errores = [];
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,7 +36,7 @@ function validarLogin(correo, password) {
     return errores;
 }
 
-// Validar Formulario de Contacto
+
 function validarContacto(nombre, correo, comentario) {
     const errores = [];
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,7 +44,7 @@ function validarContacto(nombre, correo, comentario) {
     if (!nombre || nombre.length > 100) {
         errores.push("El nombre es obligatorio (máx. 100 caracteres).");
     }
-    if (correo && (correo.length > 100 || !regexEmail.test(correo))) {
+    if (!correo || correo.trim().length === 0 || correo.length > 100 || !regexEmail.test(correo)) {
         errores.push("El correo electrónico debe tener un formato válido.");
     }
     if (!comentario || comentario.length > 500) {
@@ -53,7 +53,7 @@ function validarContacto(nombre, correo, comentario) {
     return errores;
 }
 
-// Validar Registro de Usuario
+
 function validarRegistro(datos) {
     const errores = [];
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

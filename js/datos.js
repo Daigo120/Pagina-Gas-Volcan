@@ -1,4 +1,4 @@
-// Catálogo de Productos y Tarifas - Distribuidora de Gas El Volcán
+
 const productosGas = [
     { codigo: "CL001", categoria: "Cilindros de Gas", nombre: "Cilindro GLP 5 kg", desc: "Para uso residencial (cocina, calefacción pequeña).", precioResidencial: 6500, precioComercial: 6000, stock: 80, img: "https://picsum.photos/300/200?gas5" },
     { codigo: "CL002", categoria: "Cilindros de Gas", nombre: "Cilindro GLP 11 kg", desc: "Cilindro estándar doméstico. El más utilizado en hogares.", precioResidencial: 12000, precioComercial: 11000, stock: 200, img: "https://picsum.photos/300/200?gas11" },
@@ -10,7 +10,7 @@ const productosGas = [
     { codigo: "MG004", categoria: "Mangueras y Conexiones", nombre: "Kit conexión completo", desc: "Regulador + manguera 1.5m + abrazaderas.", precioResidencial: 12990, precioComercial: 11500, stock: 25, img: "https://picsum.photos/300/200?kit" }
 ];
 
-// Regiones y Comunas de Chile para desplegables dinámicos
+
 const regionesYComunas = [
     {
         region: "Ñuble",
@@ -25,3 +25,8 @@ const regionesYComunas = [
         comunas: ["Santiago", "Providencia", "Las Condes", "Maipú", "Colina"]
     }
 ];
+
+const tipoUsuario = {
+    residencial: "Residencial",
+    comercial: "Comercial"
+};
