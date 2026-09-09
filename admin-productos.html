@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas El Volcán - Admin Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-warning" href="admin.html">🌋 Mantenedor de Productos</a>
+                <a href="admin.html" class="btn btn-outline-light btn-sm">Volver al Panel</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Catálogo Actual</h3>
+            <button class="btn btn-success fw-bold">+ Nuevo Producto</button>
+        </div>
+
+        <table class="table table-bordered table-striped shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Código</th>
+                    <th>Categoría</th>
+                    <th>Producto</th>
+                    <th>Precio Residencial</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-admin-productos">
+                <!-- Se llena automáticamente vía datos.js -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/datos.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tbody = document.getElementById("tabla-admin-productos");
+            productosGas.forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${p.codigo}</td>
+                        <td>${p.categoria}</td>
+                        <td>${p.nombre}</td>
+                        <td>$${p.precioResidencial.toLocaleString("es-CL")}</td>
+                        <td>${p.stock}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Editar</button>
+                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
