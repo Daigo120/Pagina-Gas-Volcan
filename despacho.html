@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas El Volcán - Horarios y Zona de Despacho</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-warning" href="index.html">Gas El Volcán - Despacho</a>
+                <a href="catalogo.html" class="btn btn-outline-light btn-sm">← Volver al Catálogo</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <h2 class="fw-bold mb-4">Información y Programación de Despacho</h2>
+
+   
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-dark text-white fw-bold">
+                Cobertura y Horarios de Entrega
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Zona</th>
+                                <th>Comunas cubiertas</th>
+                                <th>Días de despacho</th>
+                                <th>Horario</th>
+                                <th>Tiempo estimado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Zona Centro</strong></td>
+                                <td>Chillán (sectores centro, norte y sur)</td>
+                                <td>Lunes a Sábado</td>
+                                <td>08:00 - 20:00</td>
+                                <td>1 - 3 horas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zona Oriente</strong></td>
+                                <td>Chillán (sector oriente), Chillán Viejo</td>
+                                <td>Lunes a Viernes</td>
+                                <td>08:00 - 18:00</td>
+                                <td>2 - 4 horas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zona Rural</strong></td>
+                                <td>El Carmen, Pinto, San Ignacio</td>
+                                <td>Martes y Jueves</td>
+                                <td>08:00 - 16:00</td>
+                                <td>3 - 6 horas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zona Sur</strong></td>
+                                <td>Bulnes, Quillón</td>
+                                <td>Miércoles</td>
+                                <td>08:00 - 16:00</td>
+                                <td>4 - 6 horas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zona Comercial</strong></td>
+                                <td>Parques industriales y locales comerciales</td>
+                                <td>Lunes a Viernes</td>
+                                <td>07:00 - 17:00</td>
+                                <td>Según agenda</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark fw-bold">
+                         Completa los Datos para la Entrega
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="form-despacho">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Dirección de Entrega</label>
+                                <input type="text" id="direccion" class="form-control" placeholder="Ej: Av. Argentina 1234, Depto 501" required>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Zona / Sector</label>
+                                    <select id="selectZona" class="form-select" required>
+                                        <option value="">Selecciona tu zona...</option>
+                                        <option value="Zona Centro">Zona Centro (Chillán centro, norte y sur)</option>
+                                        <option value="Zona Oriente">Zona Oriente (Chillán oriente, Chillán Viejo)</option>
+                                        <option value="Zona Rural">Zona Rural (El Carmen, Pinto, San Ignacio)</option>
+                                        <option value="Zona Sur">Zona Sur (Bulnes, Quillón)</option>
+                                        <option value="Zona Comercial">Zona Comercial (Parques industriales)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Horario Preferente</label>
+                                    <select id="selectHorario" class="form-select" required>
+                                        <option value="">Selecciona un bloque...</option>
+                                        <option value="Mañana (08:00 - 13:00)">Mañana (08:00 - 13:00)</option>
+                                        <option value="Tarde (13:00 - 18:00)">Tarde (13:00 - 18:00)</option>
+                                        <option value="Vespertino (18:00 - 20:00)">Vespertino (18:00 - 20:00)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Notas o Indicaciones Adicionales</label>
+                                <textarea id="indicaciones" class="form-control" rows="2" placeholder="Ej: Timbre defectuoso, dejar con conserje..."></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="text-muted small">Monto Pedido:</span>
+                                    <h4 class="fw-bold text-success mb-0" id="monto-total-despacho">$0</h4>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-lg fw-bold px-4">
+                                    Continuar al Pago →
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-white text-center py-4 mt-auto bg-dark">
+        <p class="mb-0 text-muted">&copy; 2026 Distribuidora de Gas El Volcán</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const montoGuardado = localStorage.getItem("montoTotalPedido");
+            if (montoGuardado) {
+                document.getElementById("monto-total-despacho").innerText = montoGuardado;
+            }
+
+            document.getElementById("form-despacho").addEventListener("submit", (e) => {
+                e.preventDefault();
+                
+                const datosDespacho = {
+                    direccion: document.getElementById("direccion").value,
+                    zona: document.getElementById("selectZona").value,
+                    horario: document.getElementById("selectHorario").value,
+                    indicaciones: document.getElementById("indicaciones").value
+                };
+
+                localStorage.setItem("datosDespacho", JSON.stringify(datosDespacho));
+                
+               
+                window.location.href = "pago.html";
+            });
+        });
+    </script>
+</body>
+</html>

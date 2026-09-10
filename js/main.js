@@ -111,6 +111,11 @@ function irAPagar() {
    
     window.location.href = "pago.html";
 }
+function irADespacho() {
+    const totalTexto = document.getElementById("total-carrito").innerText;
+    localStorage.setItem("montoTotalPedido", totalTexto);
+    window.location.href = "despacho.html";
+}
 
 
 document.addEventListener("DOMContentLoaded", () => {
