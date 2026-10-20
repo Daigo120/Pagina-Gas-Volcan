@@ -1,55 +1,63 @@
 import { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import CampoFormulario from "../moleculas/CampoFormulario";
 
-function FormularioLogin() {
-  // 1. Cambiamos 'nombre' por 'correo'
+interface FormularioLoginProps {
+  setUsuarioLogueado: (usuario: any) => void;
+}
+
+function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const correoLimpio = correo.trim().toLowerCase();
+    const passwordLimpia = password.trim();
 
-    if (correo.trim() === "") {
-      alert("Debe ingresar su correo electrónico");
+    if (!correoLimpio || !passwordLimpia) {
+      alert("Debe completar todos los campos.");
       return;
     }
 
+    // Leemos la lista de usuarios guardados
+    const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios_db") || "[]");
 
-    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!regexEmail.test(correo)) {
-      alert("Ingrese un correo válido");
-      return;
+    // Buscamos coincidencia exacta
+    const usuarioEncontrado = usuariosGuardados.find(
+      (u: any) => 
+        u.correo && 
+        u.correo.trim().toLowerCase() === correoLimpio && 
+        u.password === passwordLimpia
+    );
+
+    if (usuarioEncontrado) {
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuarioEncontrado));
+      setUsuarioLogueado(usuarioEncontrado);
+      alert("¡Login correcto! Bienvenido " + usuarioEncontrado.nombre);
+      navigate("/");
+    } else {
+      alert("Correo o contraseña incorrectos, o usuario no registrado.");
     }
-
-
-    if (password.trim() === "") {
-      alert("Debe ingresar su contraseña");
-      return;
-    }
-    if (password.length < 6) {
-      alert("La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
-
-    alert("Login correcto con el correo: " + correo);
   };
 
   return (
     <form onSubmit={manejarLogin} noValidate>
-      <CampoFormulario
-        etiqueta="Correo Electrónico"  
-        tipo="email"                   
-        nombre="correo"                
-        valor={correo}                 
-        alCambiar={setCorreo}           
+      <CampoFormulario 
+        etiqueta="Correo Electrónico" 
+        tipo="email" 
+        nombre="correo" 
+        valor={correo} 
+        alCambiar={setCorreo} 
       />
-      <CampoFormulario
-        etiqueta="Contraseña"
-        tipo="password"
-        nombre="password"
-        valor={password}
-        alCambiar={setPassword}
+      <CampoFormulario 
+        etiqueta="Contraseña" 
+        tipo="password" 
+        nombre="password" 
+        valor={password} 
+        alCambiar={setPassword} 
       />
 
       <button type="submit" className="btn btn-warning mt-3 w-100">

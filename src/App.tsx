@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './componentes/organismos/Navbar';
 import Inicio from './paginas/Inicio';
 import Productos from './paginas/Productos';
@@ -9,40 +10,31 @@ import Login from './paginas/Login';
 import Registro from './paginas/Registro';
 
 function App() {
+  const [usuarioLogueado, setUsuarioLogueado] = useState<any | null>(() => {
+    const guardado = localStorage.getItem('usuarioLogueado');
+    return guardado ? JSON.parse(guardado) : null;
+  });
+
+  const cerrarSesion = () => {
+    localStorage.removeItem('usuarioLogueado');
+    setUsuarioLogueado(null);
+  };
+
   return (
     <>
-      <Navbar />
+      {/* Pasamos el usuario activo y la función de cerrar sesión al Navbar */}
+      <Navbar usuarioLogueado={usuarioLogueado} onCerrarSesion={cerrarSesion} />
+      
       <Routes>
-        <Route 
-          path="/" 
-          element={<Inicio />} 
-        />
-        <Route 
-          path="/productos" 
-          element={<Productos />} 
-        />
-        <Route
-          path="/producto/:id" 
-          element={<DetalleProducto />} 
-        />
-        <Route 
-          path="/quienessomos" 
-          element={<QuienesSomos />} 
-        />
-        <Route
-          path="/contacto" 
-          element={<Contacto />} 
-        />
+        <Route path="/" element={<Inicio />} />
+        <Route path="/productos" element={<Productos />} />
+        <Route path="/producto/:id" element={<DetalleProducto />} />
+        <Route path="/quienessomos" element={<QuienesSomos />} />
+        <Route path="/contacto" element={<Contacto />} />
         
-        <Route 
-          path="/login" 
-          element={<Login />} 
-        />
-        <Route 
-          path="/registro" 
-          element={<Registro />} 
-        />
-
+        {/* Pasamos la función para actualizar el login */}
+        <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
+        <Route path="/registro" element={<Registro />} />
       </Routes>
     </>
   );

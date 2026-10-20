@@ -1,14 +1,15 @@
 import Boton from '../atomos/Boton';
 
 interface CardProps {
-  id: string | number; // Permite tanto números como códigos de texto (ej. "CL001")
-  nombre: string;       // Cambiado de titulo a nombre
-  desc: string;         // Cambiado de descripcion a desc
-  precioResidencial: number; // Cambiado de precio a precioResidencial
-  img: string;          // Cambiado de Imagen a img
+  id: string | number; 
+  nombre: string;       
+  desc: string;         
+  precioResidencial: number; 
+  img: string;          
+  onAgregarCarrito?: () => void; // Recibe la función desde la vista principal
 }
 
-function CardProducto({ id, nombre, desc, precioResidencial, img }: CardProps) {
+function CardProducto({ id, nombre, desc, precioResidencial, img, onAgregarCarrito }: CardProps) {
   return (
     <div className="card" style={{ width: '21rem' }}>
       <img
@@ -24,7 +25,7 @@ function CardProducto({ id, nombre, desc, precioResidencial, img }: CardProps) {
         <p className="card-text fw-bold">${precioResidencial}</p>
 
         <div className="mt-auto">
-          <Boton id={id} />
+          <Boton id={id} onAgregarCarrito={onAgregarCarrito} />
         </div>
       </div>
     </div>

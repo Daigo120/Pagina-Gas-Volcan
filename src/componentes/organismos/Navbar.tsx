@@ -1,11 +1,16 @@
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+interface NavbarProps {
+  usuarioLogueado?: any;
+  onCerrarSesion?: () => void;
+}
+
+function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
   return (
     <nav className="navbar navbar-expand bg-dark">
       <div className="container">
         <span className="navbar-brand text-white">Mi tienda</span>
-        <div className="navbar-nav">
+        <div className="navbar-nav align-items-center">
           <Link className="nav-link text-white" to="/">
             Inicio
           </Link>
@@ -21,12 +26,28 @@ function Navbar() {
           <Link className="nav-link text-white" to="/quienessomos">
             Quienes Somos
           </Link>
-          <Link className="nav-link text-white" to="/login">
-            Login
-          </Link>
-          <Link className="nav-link text-white" to="/registro">
-            Registro
-          </Link>
+
+          {/* Renderizado condicional basado en si hay un usuario logueado */}
+          {usuarioLogueado ? (
+            <div className="d-flex align-items-center ms-3 gap-2">
+              <span className="text-white small">Hola, {usuarioLogueado.nombre}</span>
+              <button 
+                onClick={onCerrarSesion} 
+                className="btn btn-outline-danger btn-sm"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link className="nav-link text-white" to="/login">
+                Login
+              </Link>
+              <Link className="nav-link text-white" to="/registro">
+                Registro
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
