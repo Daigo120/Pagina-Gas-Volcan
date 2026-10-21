@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './componentes/organismos/Navbar';
+import Footer from './componentes/organismos/Footer';
 import Inicio from './paginas/Inicio';
 import Productos from './paginas/Productos';
 import Contacto from './paginas/Contacto';
@@ -21,22 +22,25 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app-container">
       {/* Pasamos el usuario activo y la función de cerrar sesión al Navbar */}
       <Navbar usuarioLogueado={usuarioLogueado} onCerrarSesion={cerrarSesion} />
-      
-      <Routes>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/productos" element={<Productos />} />
-        <Route path="/producto/:id" element={<DetalleProducto />} />
-        <Route path="/quienessomos" element={<QuienesSomos />} />
-        <Route path="/contacto" element={<Contacto />} />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/productos" element={<Productos />} />
+          <Route path="/producto/:id" element={<DetalleProducto />} />
+          <Route path="/quienessomos" element={<QuienesSomos />} />
+          <Route path="/contacto" element={<Contacto />} />
         
-        {/* Pasamos la función para actualizar el login */}
-        <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
-        <Route path="/registro" element={<Registro />} />
-      </Routes>
-    </>
+          {/* Pasamos la función para actualizar el login */}
+          <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
+         <Route path="/registro" element={<Registro />} />
+        </Routes>
+      </main>
+      <Footer />
+
+    </div>
   );
 }
 

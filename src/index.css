@@ -109,3 +109,41 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ocupa al menos el 100% del alto de la pantalla */
+}
+
+.main-content {
+  flex: 1; /* Hace que el contenido crezca y empuje el footer hacia abajo */
+}
+/* Pega esto en tu App.css o index.css */
+
+.footer-container {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 20px 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+}
+
+.footer-links a {
+  color: #f7fbfc;
+  text-decoration: none;
+}
