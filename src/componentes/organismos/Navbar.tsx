@@ -27,6 +27,11 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
             Quienes Somos
           </Link>
 
+          {/* Nuevo enlace para "Dónde Encontrarnos" */}
+          <Link className="nav-link text-white" to="/donde-encontrarnos">
+            Dónde Encontrarnos
+          </Link>
+
           {/* Renderizado condicional basado en si hay un usuario logueado */}
           {usuarioLogueado ? (
             <div className="d-flex align-items-center ms-3 gap-2">

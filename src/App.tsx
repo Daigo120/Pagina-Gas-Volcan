@@ -9,6 +9,9 @@ import QuienesSomos from './paginas/QuienesSomos';
 import DetalleProducto from './paginas/DetalleProducto';
 import Login from './paginas/Login'; 
 import Registro from './paginas/Registro';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Si quieres usar los íconos
+import DondeEncontrarnos from './paginas/DondeEncontrarnos';
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState<any | null>(() => {
@@ -31,6 +34,7 @@ function App() {
           <Route path="/productos" element={<Productos />} />
           <Route path="/producto/:id" element={<DetalleProducto />} />
           <Route path="/quienessomos" element={<QuienesSomos />} />
+          <Route path="/donde-encontrarnos" element={<DondeEncontrarnos />} />
           <Route path="/contacto" element={<Contacto />} />
         
           {/* Pasamos la función para actualizar el login */}

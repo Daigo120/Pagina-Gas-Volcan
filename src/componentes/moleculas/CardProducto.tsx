@@ -11,7 +11,7 @@ interface CardProps {
 
 function CardProducto({ id, nombre, desc, precioResidencial, img, onAgregarCarrito }: CardProps) {
   return (
-    <div className="card" style={{ width: '21rem' }}>
+    <div className="card text-center" style={{ width: '19.6rem' }}>
       <img
         src={img}
         className="card-img-top"
@@ -24,7 +24,7 @@ function CardProducto({ id, nombre, desc, precioResidencial, img, onAgregarCarri
         <p className="card-text">{desc}</p>
         <p className="card-text fw-bold">${precioResidencial}</p>
 
-        <div className="mt-auto">
+        <div className="mt-auto d-flex justify-content-center gap-2">
           <Boton id={id} onAgregarCarrito={onAgregarCarrito} />
         </div>
       </div>
