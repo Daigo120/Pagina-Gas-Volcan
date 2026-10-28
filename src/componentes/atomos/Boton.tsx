@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
 
 interface BotonProps {
-  id: string | number; // Cambiado a string | number según tus props originales
-  onAgregarCarrito?: () => void; // Función opcional para el botón de carrito
+  id: string | number;
+  stock: number?; 
+  onAgregarCarrito?: () => void;
 }
 
-function Boton({ id, onAgregarCarrito }: BotonProps) {
+function Boton({ id, stock, onAgregarCarrito }: BotonProps) {
+  const sinStock = stock <= 0;
+
   return (
     <div className="d-flex gap-2">
       <Link to={`/producto/${id}`} className="btn btn-outline-secondary w-50">
@@ -13,10 +16,11 @@ function Boton({ id, onAgregarCarrito }: BotonProps) {
       </Link>
       <button 
         type="button" 
-        className="btn btn-warning w-50" 
+        className={`btn w-50 ${sinStock ? 'btn-secondary' : 'btn-warning'}`}
         onClick={onAgregarCarrito}
+        disabled={sinStock}
       >
-        Agregar
+        {sinStock ? 'Sin Stock' : 'Agregar'}
       </button>
     </div>
   );

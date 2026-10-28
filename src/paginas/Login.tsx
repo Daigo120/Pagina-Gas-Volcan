@@ -1,8 +1,8 @@
-// paginas/Login.tsx
 import FormularioLogin from "../componentes/organismos/FormularioLogin";
+import type { Usuario } from "../tipos/Usuario";
 
 interface LoginProps {
-  setUsuarioLogueado: (usuario: any) => void;
+  setUsuarioLogueado: (usuario: Usuario) => void;
 }
 
 function Login({ setUsuarioLogueado }: LoginProps) {

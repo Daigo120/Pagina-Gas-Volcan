@@ -6,10 +6,11 @@ interface CardProps {
   desc: string;         
   precioResidencial: number; 
   img: string;          
-  onAgregarCarrito?: () => void; // Recibe la función desde la vista principal
+  stock: number?;
+  onAgregarCarrito?: () => void;
 }
 
-function CardProducto({ id, nombre, desc, precioResidencial, img, onAgregarCarrito }: CardProps) {
+function CardProducto({ id, nombre, desc, precioResidencial, img, stock, onAgregarCarrito }: CardProps) {
   return (
     <div className="card text-center" style={{ width: '19.6rem' }}>
       <img
@@ -25,7 +26,8 @@ function CardProducto({ id, nombre, desc, precioResidencial, img, onAgregarCarri
         <p className="card-text fw-bold">${precioResidencial}</p>
 
         <div className="mt-auto d-flex justify-content-center gap-2">
-          <Boton id={id} onAgregarCarrito={onAgregarCarrito} />
+        
+          <Boton id={id} stock={stock} onAgregarCarrito={onAgregarCarrito} />
         </div>
       </div>
     </div>

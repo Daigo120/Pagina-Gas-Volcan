@@ -1,65 +1,58 @@
-import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import CampoFormulario from "../moleculas/CampoFormulario";
+import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CampoFormulario from '../moleculas/CampoFormulario';
+import { usuariosServicio } from "../../servicios/usuariosServicio";
+import { esTextoVacio } from "../../validaciones/Validaciones";
+import type { Usuario } from '../tipos/Usuario';
 
 interface FormularioLoginProps {
-  setUsuarioLogueado: (usuario: any) => void;
+  setUsuarioLogueado: (usuario: Usuario) => void;
 }
 
 function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
-  const [correo, setCorreo] = useState("");
-  const [password, setPassword] = useState("");
+  const [correo, setCorreo] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
 
-    const correoLimpio = correo.trim().toLowerCase();
-    const passwordLimpia = password.trim();
-
-    if (!correoLimpio || !passwordLimpia) {
-      alert("Debe completar todos los campos.");
+    if (esTextoVacio(correo) || esTextoVacio(password)) {
+      setError('Debe completar todos los campos.');
       return;
     }
 
-    // Leemos la lista de usuarios guardados
-    const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios_db") || "[]");
-
-    // Buscamos coincidencia exacta
-    const usuarioEncontrado = usuariosGuardados.find(
-      (u: any) => 
-        u.correo && 
-        u.correo.trim().toLowerCase() === correoLimpio && 
-        u.password === passwordLimpia
-    );
-
-    if (usuarioEncontrado) {
-      localStorage.setItem("usuarioLogueado", JSON.stringify(usuarioEncontrado));
-      setUsuarioLogueado(usuarioEncontrado);
-      alert("¡Login correcto! Bienvenido " + usuarioEncontrado.nombre);
-      navigate("/");
+    const encontrado = usuariosServicio.buscarPorCredenciales(correo, password);
+    if (encontrado) {
+      usuariosServicio.guardarSesion(encontrado);
+      setUsuarioLogueado(encontrado);
+      navigate('/');
     } else {
-      alert("Correo o contraseña incorrectos, o usuario no registrado.");
+      setError('Correo o contraseña incorrectos.');
     }
   };
 
   return (
     <form onSubmit={manejarLogin} noValidate>
-      <CampoFormulario 
-        etiqueta="Correo Electrónico" 
-        tipo="email" 
-        nombre="correo" 
-        valor={correo} 
-        alCambiar={setCorreo} 
+      {error && <div className="alert alert-danger">{error}</div>}
+      <CampoFormulario
+        etiqueta="Correo Electrónico"
+        tipo="email"
+        nombre="correo"
+        valor={correo}
+        alCambiar={setCorreo}
+        requerido
       />
-      <CampoFormulario 
-        etiqueta="Contraseña" 
-        tipo="password" 
-        nombre="password" 
-        valor={password} 
-        alCambiar={setPassword} 
+      <CampoFormulario
+        etiqueta="Contraseña"
+        tipo="password"
+        nombre="password"
+        valor={password}
+        alCambiar={setPassword}
+        requerido
       />
-
       <button type="submit" className="btn btn-warning mt-3 w-100">
         Iniciar Sesión
       </button>

@@ -1,3 +1,6 @@
+import React from 'react';
+
+
 interface ItemCarrito {
   id: string | number;
   nombre: string;
@@ -8,9 +11,10 @@ interface ItemCarrito {
 interface CarritoProps {
   items: ItemCarrito[];
   onQuitarItem: (id: string | number) => void;
+  onFinalizar: () => void; 
 }
 
-function Carrito({ items, onQuitarItem }: CarritoProps) {
+function Carrito({ items, onQuitarItem, onFinalizar }: CarritoProps) {
   const total = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
 
   return (
@@ -36,7 +40,6 @@ function Carrito({ items, onQuitarItem }: CarritoProps) {
                     ${item.precio.toLocaleString('es-CL')}
                   </small>
                 </div>
-                {/* Botón Quitar */}
                 <button
                   type="button"
                   className="btn btn-outline-danger btn-sm px-3"
@@ -60,6 +63,7 @@ function Carrito({ items, onQuitarItem }: CarritoProps) {
           type="button" 
           className="btn btn-success w-100 py-2 fw-bold"
           disabled={items.length === 0}
+          onClick={onFinalizar} 
         >
           Finalizar Pedido
         </button>

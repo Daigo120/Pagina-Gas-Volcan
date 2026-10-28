@@ -1,6 +1,9 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import CampoFormulario from "../moleculas/CampoFormulario";
+import { usuariosServicio } from "../../servicios/usuariosServicio";
+import { esEmailValido, esPasswordValida, esTextoVacio } from "../../validaciones/Validaciones";
+import type { TipoUsuario, Usuario } from "../../tipos/Usuario";
 
 function FormularioRegistro() {
   const [run, setRun] = useState("");
@@ -34,10 +37,10 @@ function FormularioRegistro() {
       return;
     }
 
-    // Obtenemos los usuarios previos de localStorage
+    
     const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios_db") || "[]");
 
-    // Verificamos si el correo ya existe
+   
     const existe = usuariosGuardados.some(
       (u: any) => u.correo && u.correo.trim().toLowerCase() === correoLimpio
     );
@@ -47,7 +50,7 @@ function FormularioRegistro() {
       return;
     }
 
-    // Creamos y guardamos el nuevo usuario
+    
     const nuevoUsuario = { 
       run: run.trim(), 
       nombre: nombre.trim(), 

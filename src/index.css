@@ -113,13 +113,13 @@ code {
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ocupa al menos el 100% del alto de la pantalla */
+  min-height: 100vh;
 }
 
 .main-content {
-  flex: 1; /* Hace que el contenido crezca y empuje el footer hacia abajo */
+  flex: 1; 
 }
-/* Pega esto en tu App.css o index.css */
+
 
 .footer-container {
   background-color: #1a1a1a;
