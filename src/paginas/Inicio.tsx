@@ -1,10 +1,14 @@
-function Inicio() {
+import React from 'react';
+import HeroInicio from '../componentes/organismos/HeroInicio';
+import BeneficiosInicio from '../componentes/organismos/BeneficiosInicio';
+
+const Inicio: React.FC = () => {
   return (
-    <div className="container mt-4">
-      <h1>Inicio</h1>
-      <p>Bienvenido a nuestra tienda.</p>
+    <div className="container py-4">
+      <HeroInicio />
+      <BeneficiosInicio />
     </div>
   );
-}
+};
 
 export default Inicio;

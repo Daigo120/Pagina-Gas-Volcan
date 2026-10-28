@@ -9,7 +9,7 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
   return (
     <nav className="navbar navbar-expand bg-dark">
       <div className="container">
-        <span className="navbar-brand text-white">Mi tienda</span>
+        <span className="navbar-brand text-white">Gas el Volcán</span>
         <div className="navbar-nav align-items-center">
           <Link className="nav-link text-white" to="/">
             Inicio
