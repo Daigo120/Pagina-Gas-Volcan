@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+
 interface NavbarProps {
   usuarioLogueado?: any;
   onCerrarSesion?: () => void;
@@ -23,8 +24,8 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
             Contacto
           </Link>
 
-          <Link className="nav-link text-white" to="/quienessomos">
-            Quienes Somos
+          <Link className="nav-link text-white" to="/nosotros">
+            Nosotros
           </Link>
 
           {/* Nuevo enlace para "Dónde Encontrarnos" */}

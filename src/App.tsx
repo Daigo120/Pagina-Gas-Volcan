@@ -5,7 +5,7 @@ import Footer from './componentes/organismos/Footer';
 import Inicio from './paginas/Inicio';
 import Productos from './paginas/Productos';
 import Contacto from './paginas/Contacto';
-import QuienesSomos from './paginas/QuienesSomos';
+import Nosotros from './paginas/Nosotros';
 import DetalleProducto from './paginas/DetalleProducto';
 import Login from './paginas/Login'; 
 import Registro from './paginas/Registro';
@@ -33,7 +33,7 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/producto/:id" element={<DetalleProducto />} />
-          <Route path="/quienessomos" element={<QuienesSomos />} />
+          <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/donde-encontrarnos" element={<DondeEncontrarnos />} />
           <Route path="/contacto" element={<Contacto />} />
         
