@@ -17,28 +17,10 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
 
   const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    setError('');
 
-
-    if (correo.trim() === "") {
-      alert("Debe ingresar su correo");
-      return;
-    }
-
-
-    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!regexEmail.test(correo)) {
-      alert("Ingrese un correo válido");
-      return;
-    }
-
-
-    if (password.trim() === "") {
-      alert("Debe ingresar una contraseña");
-      return;
-    }
-    if (password.length < 4 || password.length > 10) {
-      alert("La contraseña debe tener entre 4 y 10 caracteres.");
+    if (esTextoVacio(correo) || esTextoVacio(password)) {
+      setError('Debe completar todos los campos.');
       return;
     }
 
@@ -48,7 +30,7 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
       setUsuarioLogueado(encontrado);
       navigate('/');
     } else {
-      alert('Correo o contraseña incorrectos.');
+      setError('Correo o contraseña incorrectos.');
     }
   };
 

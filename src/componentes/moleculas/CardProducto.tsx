@@ -12,7 +12,7 @@ interface CardProps {
 
 function CardProducto({ id, nombre, desc, precioResidencial, img, stock, onAgregarCarrito }: CardProps) {
   return (
-    <div className="card text-center" style={{ width: '19.6rem' }}>
+    <div className="card text-center" style={{ width: '22rem' }}>
       <img
         src={img}
         className="card-img-top"

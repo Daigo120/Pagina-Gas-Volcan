@@ -2,7 +2,8 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import CampoFormulario from "../moleculas/CampoFormulario";
 import { usuariosServicio } from "../../servicios/usuariosServicio";
-import type { TipoUsuario } from "../../tipos/Usuario";
+import { esEmailValido, esPasswordValida, esTextoVacio } from "../../validaciones/Validaciones";
+import type { TipoUsuario, Usuario } from "../../tipos/Usuario";
 
 function FormularioRegistro() {
   const [run, setRun] = useState("");
@@ -20,94 +21,43 @@ function FormularioRegistro() {
     const correoLimpio = correo.trim().toLowerCase();
     const passwordLimpia = password.trim();
 
-    // 1. Validar RUN vacío
-    if (!run.trim()) {
-      alert("Debe ingresar su RUN.");
-      return;
-    } 
-
-
-    if (
-      !/^\d{1,8}[\dKk]$/.test(run.replace(/[.-]/g, '')) || 
-      (() => {
-        let t = run.replace(/[.-]/g, '').toUpperCase();
-        let s = 0, m = 2;
-        for (let i = t.length - 2; i >= 0; i--) {
-          s += parseInt(t[i]) * m;
-          m = m === 7 ? 2 : m + 1;
-        }
-        let d = 11 - (s % 11);
-        return t.slice(-1) !== (d === 11 ? '0' : d === 10 ? 'K' : d.toString());
-      })()
-    ) {
-      alert("Rut invalido.");
+    if (!run.trim() || !nombre.trim() || !apellidos.trim() || !correoLimpio || !passwordLimpia || !tipoUsuario.trim() || !direccion.trim()) {
+      alert("Todos los campos son obligatorios.");
       return;
     }
 
-  
-    if (!nombre.trim()) {
-      alert("Debe ingresar su nombre.");
+    if (passwordLimpia.length < 4 || passwordLimpia.length > 10) {
+      alert("La contraseña debe tener entre 4 y 10 caracteres.");
       return;
     }
 
-  
-    if (!apellidos.trim()) {
-      alert("Debe ingresar sus apellidos.");
-      return;
-    }
-
-  
-    if (!correoLimpio) {
-      alert("Debe ingresar su correo electrónico.");
-      return;
-    }
-
-  
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!regexEmail.test(correoLimpio)) {
       alert("Ingrese un correo electrónico válido.");
       return;
     }
 
-   
-    if (!passwordLimpia) {
-      alert("Debe ingresar su contraseña.");
-      return;
-    }
-
-  
-    if (passwordLimpia.length < 4 || passwordLimpia.length > 10) {
-      alert("La contraseña debe tener entre 4 y 10 caracteres.");
-      return;
-    }
-
-    
-    if (!tipoUsuario || !tipoUsuario.trim()) {
-      alert("Debe seleccionar un tipo de usuario.");
-      return;
-    }
-
-   
-    if (!direccion.trim()) {
-      alert("Debe ingresar su dirección.");
-      return;
-    }
-
-   
-    if (usuariosServicio.existeCorreo(correo)) {
-      alert('Este correo electrónico ya está registrado.');
-      return;
-    }
-
     
     const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios_db") || "[]");
+
+   
+    const existe = usuariosGuardados.some(
+      (u: any) => u.correo && u.correo.trim().toLowerCase() === correoLimpio
+    );
+
+    if (existe) {
+      alert("Este correo electrónico ya está registrado.");
+      return;
+    }
+
+    
     const nuevoUsuario = { 
       run: run.trim(), 
       nombre: nombre.trim(), 
       apellidos: apellidos.trim(), 
       correo: correoLimpio, 
       password: passwordLimpia, 
-      tipoUsuario: tipoUsuario as TipoUsuario,
+      tipoUsuario, 
       direccion: direccion.trim() 
     };
 

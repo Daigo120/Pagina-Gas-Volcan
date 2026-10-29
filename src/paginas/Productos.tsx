@@ -24,7 +24,7 @@ function Productos({ setTotalPedido }: ProductosProps) {
     setProductosDB(productosServicio.obtenerTodos());
   }, []);
 
-
+  // 👇 ESTO ES CLAVE: Cada vez que el carrito cambie, actualizamos el total en App.tsx
   useEffect(() => {
     const nuevoTotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
     setTotalPedido(nuevoTotal);
