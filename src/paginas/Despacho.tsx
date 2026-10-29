@@ -49,35 +49,35 @@ function Despacho({ totalPedido }: DespachoProps) {
           <tbody>
             <tr>
               <td className="fw-bold">Zona Centro</td>
-              <td>Chillán (sectores centro, norte y sur)</td>
+              <td>Centro Cívico, Población Sta Marta</td>
               <td>Lunes a Sábado</td>
               <td>08:00 - 20:00</td>
               <td>1 - 3 horas</td>
             </tr>
             <tr>
               <td className="fw-bold">Zona Oriente</td>
-              <td>Chillán (sector oriente), Chillán Viejo</td>
+              <td>Ciudad Empresarial, La Piramide</td>
               <td>Lunes a Viernes</td>
               <td>08:00 - 18:00</td>
               <td>2 - 4 horas</td>
             </tr>
             <tr>
-              <td className="fw-bold">Zona Rural</td>
-              <td>El Carmen, Pinto, San Ignacio</td>
+              <td className="fw-bold">Zona Norte</td>
+              <td>La Pincoya, Patria Nueva, Las Bandurrias</td>
               <td>Martes y Jueves</td>
               <td>08:00 - 16:00</td>
               <td>3 - 6 horas</td>
             </tr>
             <tr>
               <td className="fw-bold">Zona Sur</td>
-              <td>Bulnes, Quillón</td>
+              <td>Rinconada</td>
               <td>Miércoles</td>
               <td>08:00 - 16:00</td>
               <td>4 - 6 horas</td>
             </tr>
             <tr>
               <td className="fw-bold">Zona Comercial</td>
-              <td>Parques industriales y locales comerciales</td>
+              <td>Barrio Industrial, El Barrero</td>
               <td>Lunes a Viernes</td>
               <td>07:00 - 17:00</td>
               <td>Según agenda</td>
@@ -118,11 +118,11 @@ function Despacho({ totalPedido }: DespachoProps) {
                   required
                 >
                   <option value="">Selecciona tu zona...</option>
-                  <option value="Zona Centro">Zona Centro (Chillán centro, norte y sur)</option>
-                  <option value="Zona Oriente">Zona Oriente (Chillán oriente, Chillán Viejo)</option>
-                  <option value="Zona Rural">Zona Rural (El Carmen, Pinto, San Ignacio)</option>
-                  <option value="Zona Sur">Zona Sur (Bulnes, Quillón)</option>
-                  <option value="Zona Comercial">Zona Comercial (Parques industriales)</option>
+                  <option value="Zona Centro">Zona Centro (Centro Cívico, Población Sta Marta)</option>
+                  <option value="Zona Oriente">Zona Oriente (Ciudad Empresarial, La Piramide)</option>
+                  <option value="Zona Norte">Zona Norte (La Pincoya, Patria Nueva, Las Bandurrias)</option>
+                  <option value="Zona Sur">Zona Sur (Rinconada)</option>
+                  <option value="Zona Comercial">Zona Comercial (Barrio Industrial, El Barrero)</option>
                 </select>
               </div>
 
