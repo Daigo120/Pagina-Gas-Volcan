@@ -6,8 +6,8 @@ function Admin() {
   return (
     <div className="container-fluid p-0">
       <header className="bg-dark text-white p-3 d-flex justify-content-between align-items-center border-bottom border-warning border-4">
-        <h3 className="m-0" style={{ color: '#ffc107' }}>Panel Admin - Gas El Volcán</h3>
-        <button className="btn btn-outline-light btn-sm" onClick={() => navigate('/')}>Cerrar Sesión</button>
+        <h3 className="m-0" style={{ color: '#ffc107' }}>Panel Admin</h3>
+        
       </header>
 
       <div className="container mt-5">

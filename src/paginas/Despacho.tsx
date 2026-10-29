@@ -8,7 +8,6 @@ interface DespachoProps {
 function Despacho({ totalPedido }: DespachoProps) {
   const navigate = useNavigate();
   
-  
   const [direccion, setDireccion] = useState('');
   const [zona, setZona] = useState('');
   const [horario, setHorario] = useState('');
@@ -16,12 +15,22 @@ function Despacho({ totalPedido }: DespachoProps) {
 
   const manejarEnvio = (e: FormEvent) => {
     e.preventDefault();
-    if (!direccion || !zona || !horario) {
-      alert("Por favor, completa los datos obligatorios de entrega.");
+    
+    // 👇 TUS VALIDACIONES (con alert separados)
+    if (direccion.trim() === '') {
+      alert('Debe ingresar una dirección de entrega');
+      return;
+    }
+    if (zona === '') {
+      alert('Debe seleccionar una zona');
+      return;
+    }
+    if (horario === '') {
+      alert('Debe seleccionar un horario preferente');
       return;
     }
     
-    alert(`Pedido por $${totalPedido.toLocaleString('es-CL')} agendado con éxito.`);
+    // Avanza a la pasarela de pago
     navigate('/pago'); 
   };
 
@@ -34,7 +43,7 @@ function Despacho({ totalPedido }: DespachoProps) {
         </Link>
       </div>
 
-      
+
       <div className="table-responsive mb-5 shadow-sm">
         <table className="table table-bordered align-middle mb-0">
           <thead className="table-dark">
@@ -86,14 +95,14 @@ function Despacho({ totalPedido }: DespachoProps) {
         </table>
       </div>
 
-      
+
       <div className="card shadow-sm mx-auto" style={{ maxWidth: '800px' }}>
         <div className="card-header bg-warning text-dark fw-bold py-3 text-center">
           Completa los Datos para la Entrega
         </div>
         <div className="card-body p-4">
-          <form onSubmit={manejarEnvio}>
-            
+
+          <form onSubmit={manejarEnvio} noValidate>
             
             <div className="mb-3">
               <label className="form-label fw-bold">Dirección de Entrega <span className="text-danger">*</span></label>
@@ -103,11 +112,9 @@ function Despacho({ totalPedido }: DespachoProps) {
                 placeholder="Ej: Av. Argentina 1234, Depto 501"
                 value={direccion}
                 onChange={(e) => setDireccion(e.target.value)}
-                required
               />
             </div>
 
-           
             <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label fw-bold">Zona / Sector <span className="text-danger">*</span></label>
@@ -115,9 +122,9 @@ function Despacho({ totalPedido }: DespachoProps) {
                   className="form-select"
                   value={zona}
                   onChange={(e) => setZona(e.target.value)}
-                  required
                 >
                   <option value="">Selecciona tu zona...</option>
+
                   <option value="Zona Centro">Zona Centro (Centro Cívico, Población Sta Marta)</option>
                   <option value="Zona Oriente">Zona Oriente (Ciudad Empresarial, La Piramide)</option>
                   <option value="Zona Norte">Zona Norte (La Pincoya, Patria Nueva, Las Bandurrias)</option>
@@ -132,7 +139,6 @@ function Despacho({ totalPedido }: DespachoProps) {
                   className="form-select"
                   value={horario}
                   onChange={(e) => setHorario(e.target.value)}
-                  required
                 >
                   <option value="">Selecciona un bloque...</option>
                   <option value="Mañana (08:00 - 13:00)">Mañana (08:00 - 13:00)</option>
@@ -142,7 +148,6 @@ function Despacho({ totalPedido }: DespachoProps) {
               </div>
             </div>
 
-            {/* Input Notas */}
             <div className="mb-4">
               <label className="form-label fw-bold">Notas o Indicaciones Adicionales</label>
               <textarea 
@@ -154,7 +159,6 @@ function Despacho({ totalPedido }: DespachoProps) {
               ></textarea>
             </div>
 
-            {/* Total y Botón */}
             <div className="d-flex justify-content-between align-items-end border-top pt-4 mt-2">
               <div>
                 <span className="text-muted d-block">Monto Pedido:</span>

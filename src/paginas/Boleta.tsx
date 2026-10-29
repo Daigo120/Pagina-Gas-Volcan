@@ -7,18 +7,18 @@ interface BoletaProps {
 function Boleta({ totalPedido }: BoletaProps) {
   const navigate = useNavigate();
 
-  // Si viene de props lo usa, si no, lo busca en el LocalStorage (por si recargan)
+
   const totalFinal = totalPedido || Number(localStorage.getItem('ultimoTotal')) || 0;
 
   const folio = Math.floor(100000 + Math.random() * 900000);
   const fechaActual = new Date().toLocaleString('es-CL');
 
-  // Cálculos de Neto e IVA
+
   const neto = Math.round(totalFinal / 1.19);
   const iva = totalFinal - neto;
 
   const terminarCompra = () => {
-    // Limpiamos la memoria del carrito
+
     localStorage.removeItem('ultimoTotal');
     navigate('/');
   };

@@ -7,7 +7,7 @@ const DondeEncontrarnos: React.FC = () => {
   return (
     <div className="container py-5">
       
-      {/* Sección Header */}
+
       <div className="row mb-5 text-center">
         <div className="col">
           <h2 className="display-5 fw-bold text-volcan">Dónde encontrarnos</h2>
@@ -17,7 +17,7 @@ const DondeEncontrarnos: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid Principal */}
+
       <div className="row g-4 align-items-stretch">
         <div className="col-lg-7">
           <MapCard />

@@ -17,7 +17,7 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
   return (
     <nav className="navbar navbar-expand bg-dark">
       <div className="container">
-        {/* 👇 Nombre de tu amigo */}
+
         <span className="navbar-brand text-white">Gas el Volcán</span> 
         
         <div className="navbar-nav align-items-center">
@@ -25,19 +25,19 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
           <Link className="nav-link text-white" to="/productos">Productos</Link>
           <Link className="nav-link text-white" to="/contacto">Contacto</Link>
           
-          {/* 👇 Enlace de tu amigo */}
+
           <Link className="nav-link text-white" to="/nosotros">Nosotros</Link>
           
           <Link className="nav-link text-white" to="/donde-encontrarnos">Dónde Encontrarnos</Link>
 
-          {/* 👇 Botón de Admin Nuestro */}
+
           {usuarioLogueado && usuarioLogueado.tipoUsuario === 'admin' && (
             <Link className="nav-link text-warning fw-bold" to="/admin">
               Panel Admin
             </Link>
           )}
 
-          {/* Renderizado condicional del Login (Nuestro) */}
+
           {usuarioLogueado ? (
             <div className="d-flex align-items-center ms-3 gap-2">
               <span className="text-white small">Hola, {usuarioLogueado.nombre}</span>
