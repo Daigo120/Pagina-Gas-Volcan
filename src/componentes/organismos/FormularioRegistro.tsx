@@ -20,7 +20,7 @@ function FormularioRegistro() {
     const correoLimpio = correo.trim().toLowerCase();
     const passwordLimpia = password.trim();
 
-    // 1. Validar RUN vacío
+    
     if (!run.trim()) {
       alert("Debe ingresar su RUN.");
       return;

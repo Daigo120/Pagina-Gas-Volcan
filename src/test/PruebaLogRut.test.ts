@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 
 describe('Prueba 3: Longitud Básica del RUN', () => {
   
-  // Al hacerla una función normal, evitamos que TypeScript se queje
   function tieneLongitudValida(run: string): boolean {
     const runLimpio = run.replace(/[.-]/g, '');
     return runLimpio.length >= 8 && runLimpio.length <= 9;

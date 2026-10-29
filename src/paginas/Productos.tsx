@@ -18,7 +18,6 @@ interface ProductosProps {
   onQuitar: (id: string | number) => void;
 }
 
-// 👇 1. Recibimos TODAS las props aquí
 function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosProps) {
   const [productosDB, setProductosDB] = useState<Producto[]>([]);
   const navigate = useNavigate();
@@ -27,7 +26,6 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
     setProductosDB(productosServicio.obtenerTodos());
   }, []);
 
-  // 👇 2. Usamos el carrito que viene de App.tsx para calcular el total
   useEffect(() => {
     const nuevoTotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
     setTotalPedido(nuevoTotal);
@@ -60,7 +58,6 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
     <div className="container mt-4 mb-5">
       <h1 className="text-center mb-4">Productos - Gas El Volcán</h1>
 
-      {/* 👇 3. Usamos la grilla responsiva */}
       <div className="row g-3">
         
         <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
@@ -70,7 +67,7 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
             precioResidencial={getPrecio("CL001", 6500)}
             img={getImg("CL001", "img/cilindro_5kg.png")}
             stock={getStock("CL001")}
-            // 👇 4. Usamos la función onAgregar que viene de App.tsx
+    
             onAgregarCarrito={() => onAgregar("CL001", "Cilindro GLP 5 kg", getPrecio("CL001", 6500))}
           />
         </div>
@@ -167,7 +164,6 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
         ))}
       </div>
 
-      {/* 👇 5. Usamos el carrito y la función onQuitar que vienen de App.tsx */}
       <Carrito 
         items={carrito} 
         onQuitarItem={onQuitar} 

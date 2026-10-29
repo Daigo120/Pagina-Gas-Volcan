@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 interface BotonProps {
   id: string | number;
-  stock: number?; 
+  stock?: number; 
   onAgregarCarrito?: () => void;
 }
 

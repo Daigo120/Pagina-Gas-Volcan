@@ -30,7 +30,7 @@ function Contacto() {
           
           <div className="accordion shadow-sm" id="accordionFAQ">
             
-            {/* Ítem 1 */}
+           
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingOne">
                 <button 
@@ -49,7 +49,7 @@ function Contacto() {
               </div>
             </div>
 
-            {/* Ítem 2 */}
+           
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingTwo">
                 <button 
@@ -71,7 +71,6 @@ function Contacto() {
               </div>
             </div>
 
-            {/* Ítem 3 */}
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingThree">
                 <button 
@@ -92,7 +91,7 @@ function Contacto() {
               </div>
             </div>
 
-            {/* Ítem 4 */}
+        
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingFour">
                 <button 
@@ -111,7 +110,7 @@ function Contacto() {
               </div>
             </div>
 
-            {/* Ítem 5 */}
+           
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingFive">
                 <button 
@@ -130,7 +129,7 @@ function Contacto() {
               </div>
             </div>
 
-            {/* Ítem 6 */}
+          
             <div className="accordion-item">
               <h3 className="accordion-header" id="headingSix">
                 <button 

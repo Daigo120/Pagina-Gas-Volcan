@@ -1,4 +1,4 @@
-import { useState } from 'react'; // 👈 1. Importamos useState
+import { useState } from 'react'; 
 import { Link, useNavigate } from 'react-router-dom';
 import type { Usuario } from '../../tipos/Usuario';
 
@@ -10,15 +10,15 @@ interface NavbarProps {
 function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
   const navigate = useNavigate();
   
-  // 👇 2. Creamos un estado para controlar si el menú está abierto o cerrado
+  
   const [menuAbierto, setMenuAbierto] = useState(false);
 
-  // 👇 3. Función para cerrar el menú
+  
   const cerrarMenu = () => setMenuAbierto(false);
 
   const manejarCerrarSesion = () => {
     onCerrarSesion();
-    cerrarMenu(); // Cerramos el menú al salir
+    cerrarMenu(); 
     navigate('/');
   };
 
@@ -27,22 +27,19 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
       <div className="container">
         <span className="navbar-brand text-white">Gas el Volcán</span>
         
-        {/* 👇 4. El botón ahora usa nuestro estado de React */}
         <button 
           className="navbar-toggler" 
           type="button" 
-          onClick={() => setMenuAbierto(!menuAbierto)} // Alterna abierto/cerrado
+          onClick={() => setMenuAbierto(!menuAbierto)} 
           aria-expanded={menuAbierto}
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* 👇 5. El div ahora se muestra u oculta dinámicamente */}
         <div className={`collapse navbar-collapse ${menuAbierto ? 'show' : ''}`} id="navbarNav">
           <div className="navbar-nav align-items-lg-center ms-auto">
             
-            {/* 👇 6. Agregamos onClick={cerrarMenu} a cada Link */}
             <Link className="nav-link text-white" to="/" onClick={cerrarMenu}>Inicio</Link>
             <Link className="nav-link text-white" to="/productos" onClick={cerrarMenu}>Productos</Link>
             <Link className="nav-link text-white" to="/contacto" onClick={cerrarMenu}>Contacto</Link>

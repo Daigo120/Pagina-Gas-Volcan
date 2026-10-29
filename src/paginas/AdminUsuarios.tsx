@@ -91,7 +91,6 @@ function AdminUsuarios() {
     const nuevoNombre = partesNombre[0] || "";
     const nuevosApellidos = partesNombre.slice(1).join(" ") || "";
 
-    // Actualizamos la lista
     const usuariosActualizados = usuarios.map((u) => {
       if (u.correo === usuarioEditando.correo) {
         return {
@@ -165,7 +164,7 @@ function AdminUsuarios() {
                       className="btn btn-danger btn-sm" 
                       onClick={() => eliminarUsuario(user.correo)}
                     >
-                      Bloquear
+                      Eliminar
                     </button>
                   </td>
                 </tr>

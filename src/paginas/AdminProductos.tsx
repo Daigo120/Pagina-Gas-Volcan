@@ -2,9 +2,6 @@ import { useState, useEffect, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { productosServicio, type Producto } from "../servicios/productosServicio";
 
-// ==========================================
-// 1. TABLA (Recibe Props)
-// ==========================================
 interface TablaProductosProps {
   productos: Producto[];
   onEditar: (producto: Producto) => void;
@@ -49,17 +46,12 @@ function TablaProductos({ productos, onEditar, onEliminar }: TablaProductosProps
   );
 }
 
-// ==========================================
-// 2. COMPONENTE PRINCIPAL (Página)
-// ==========================================
 function AdminProductos() {
   const [productos, setProductos] = useState<Producto[]>([]);
   
-  // Estados del Modal
   const [modalAbierto, setModalAbierto] = useState(false);
   const [editando, setEditando] = useState(false);
   
-  // Estados de los inputs
   const [codigo, setCodigo] = useState("");
   const [categoria, setCategoria] = useState("");
   const [nombre, setNombre] = useState("");

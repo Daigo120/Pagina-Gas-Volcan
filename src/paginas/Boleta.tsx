@@ -30,18 +30,18 @@ function Boleta({ totalPedido }: BoletaProps) {
         style={{ maxWidth: '400px', width: '100%', backgroundColor: '#fff', border: '1px solid #ccc' }}
       >
         <div className="text-center mb-4">
-          <h5 className="fw-bold mb-1">R.U.T. 77194706-9</h5>
+          <h5 className="fw-bold mb-1">R.U.T. 77.194.706-9</h5>
           <h6 className="fw-bold border border-dark border-2 py-2">BOLETA ELECTRÓNICA</h6>
           <h4 className="fw-bold mt-2">{folio}</h4>
           <hr />
-          <p className="small mb-0">Sii - Valparaíso</p>
+          <p className="small mb-0">Sii - Santiago</p>
           <p className="small mb-0">{fechaActual}</p>
           <h6 className="fw-bold mt-2">GAS EL VOLCÁN SPA</h6>
         </div>
 
         <div className="small mb-3">
           <p className="mb-0">Giro: Venta de Gas Licuado</p>
-          <p className="mb-0">Dirección: Av. Argentina 123, Chillán</p>
+          <p className="mb-0">Dirección: Sta. Elena de Huechuraba 1660 </p>
           <p className="mb-0">Fono: 600 777 44 33</p>
         </div>
 

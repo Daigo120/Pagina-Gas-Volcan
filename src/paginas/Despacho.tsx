@@ -16,7 +16,6 @@ function Despacho({ totalPedido }: DespachoProps) {
   const manejarEnvio = (e: FormEvent) => {
     e.preventDefault();
     
-    // 👇 TUS VALIDACIONES (con alert separados)
     if (direccion.trim() === '') {
       alert('Debe ingresar una dirección de entrega');
       return;
@@ -30,7 +29,6 @@ function Despacho({ totalPedido }: DespachoProps) {
       return;
     }
     
-    // Avanza a la pasarela de pago
     navigate('/pago'); 
   };
 

@@ -1,4 +1,3 @@
-// src/paginas/DondeEncontrarnos.tsx
 import React from 'react';
 import MapCard from "../componentes/organismos/MapCard";
 import CardItemContacto from "../componentes/organismos/CardItemContacto";
