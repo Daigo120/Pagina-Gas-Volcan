@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const HeroInicio: React.FC = () => {
   return (
     <div className="row align-items-center py-5 mb-5">
-      {/* Columna de Texto */}
+
       <div className="col-lg-6 mb-4 mb-lg-0 text-start">
         <h1 className="display-4 fw-bold mb-4">
           Distribuidora de <span className="text-volcan">Gas El Volcán</span>

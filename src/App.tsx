@@ -12,7 +12,7 @@ import Login from './paginas/Login';
 import Registro from './paginas/Registro';
 import Despacho from './paginas/Despacho'; // 👈 Nuestro
 import Pago from './paginas/Pago'; // 👈 Nuestro
-
+import Boleta from './paginas/Boleta';
 // 👈 Rutas de Admin Nuestras
 import Admin from './paginas/Admin';
 import AdminProductos from './paginas/AdminProductos';
@@ -23,7 +23,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { inyectarAdminDePrueba } from './servicios/usuariosServicio';
 
+interface ItemCarrito {
+  id: string | number;
+  nombre: string;
+  precio: number;
+  cantidad: number;
+}
+
 function App() {
+  const [carrito, setCarrito] = useState<ItemCarrito[]>([]);
   const [usuarioLogueado, setUsuarioLogueado] = useState<Usuario | null>(() => {
     try {
       return JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
@@ -31,6 +39,22 @@ function App() {
       return null;
     }
   });
+
+  const handleAgregarCarrito = (id: string, nombre: string, precio: number) => {
+    setCarrito((prevCarrito) => {
+      const existe = prevCarrito.find((item) => item.id === id);
+      if (existe) {
+        return prevCarrito.map((item) =>
+          item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item
+        );
+      }
+      return [...prevCarrito, { id, nombre, precio, cantidad: 1 }];
+    });
+  };
+
+  const handleQuitarCarrito = (id: string | number) => {
+    setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
+  };
 
   const [totalPedido, setTotalPedido] = useState(0);
 
@@ -61,7 +85,17 @@ function App() {
         <Routes>
           {/* Rutas Públicas */}
           <Route path="/" element={<Inicio />} />
-          <Route path="/productos" element={<Productos setTotalPedido={setTotalPedido} />} />
+          <Route 
+            path="/productos" 
+            element={
+              <Productos 
+                carrito={carrito}
+                setTotalPedido={setTotalPedido} 
+                onAgregar={handleAgregarCarrito}
+                onQuitar={handleQuitarCarrito}
+              />
+            } 
+          />
           <Route path="/producto/:id" element={<DetalleProducto />} />
           
           {/* 👇 Ruta cambiada a /nosotros */}
@@ -73,7 +107,7 @@ function App() {
           {/* 👇 Nuestras rutas de compra */}
           <Route path="/despacho" element={<Despacho totalPedido={totalPedido} />} />
           <Route path="/pago" element={<Pago totalPedido={totalPedido} />} />
-          
+          <Route path="/boleta" element={<Boleta totalPedido={totalPedido} />} />
           <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
           <Route path="/registro" element={<Registro />} />
 

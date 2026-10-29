@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CampoFormulario from '../moleculas/CampoFormulario';
 import { usuariosServicio } from "../../servicios/usuariosServicio";
-import { esTextoVacio } from "../../validaciones/Validaciones";
+
 import type { Usuario } from '../tipos/Usuario';
 
 interface FormularioLoginProps {
@@ -17,10 +17,28 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
 
   const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
+    
 
-    if (esTextoVacio(correo) || esTextoVacio(password)) {
-      setError('Debe completar todos los campos.');
+
+    if (correo.trim() === "") {
+      alert("Debe ingresar su correo");
+      return;
+    }
+
+
+    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!regexEmail.test(correo)) {
+      alert("Ingrese un correo válido");
+      return;
+    }
+
+
+    if (password.trim() === "") {
+      alert("Debe ingresar una contraseña");
+      return;
+    }
+    if (password.length < 4 || password.length > 10) {
+      alert("La contraseña debe tener entre 4 y 10 caracteres.");
       return;
     }
 
@@ -30,7 +48,7 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
       setUsuarioLogueado(encontrado);
       navigate('/');
     } else {
-      setError('Correo o contraseña incorrectos.');
+      alert('Correo o contraseña incorrectos.');
     }
   };
 

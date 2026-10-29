@@ -6,7 +6,7 @@ interface CardProps {
   desc: string;         
   precioResidencial: number; 
   img: string;          
-  stock: number?;
+  stock?: number;
   onAgregarCarrito?: () => void;
 }
 

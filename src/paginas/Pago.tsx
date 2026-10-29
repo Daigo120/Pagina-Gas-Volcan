@@ -15,8 +15,46 @@ function Pago({ totalPedido }: PagoProps) {
   const manejarPago = (e: FormEvent) => {
     e.preventDefault();
 
-    alert(`¡Pago exitoso por $${totalPedido.toLocaleString('es-CL')}! Tu pedido está en camino.`);
-    navigate('/productos');
+
+    if (tarjeta.trim() === '') {
+      alert('Debe ingresar el número de tarjeta.');
+      return;
+    }
+
+    if (tarjeta.length !== 16) {
+      alert('El número de tarjeta debe tener 16 dígitos.');
+      return;
+    }
+
+    if (fecha.trim() === '') {
+      alert('Debe ingresar la fecha de expiración.');
+      return;
+    }
+
+    const regexFecha = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!regexFecha.test(fecha)) {
+      alert('Ingrese una fecha válida en formato MM/AA.');
+      return;
+    }
+
+    if (cvv.trim() === '') {
+      alert('Debe ingresar el CVV.');
+      return;
+    }
+
+    if (cvv.length !== 3) {
+      alert('El CVV debe tener 3 dígitos.');
+      return;
+    }
+
+    if (!cuotas) {
+      alert('Debe seleccionar la cantidad de cuotas.');
+      return;
+    }
+
+
+    localStorage.setItem('ultimoTotal', totalPedido.toString());
+    navigate('/boleta');
   };
 
 
@@ -36,7 +74,7 @@ function Pago({ totalPedido }: PagoProps) {
           
           <h5 className="fw-bold mb-4">Ingresa los datos de tu tarjeta:</h5>
 
-          {/* TARJETA VISUAL */}
+
           <div 
             className="mx-auto mb-4 p-3 rounded-3 text-white d-flex flex-column justify-content-between shadow"
             style={{ 
@@ -63,10 +101,10 @@ function Pago({ totalPedido }: PagoProps) {
             </div>
           </div>
 
-          <form onSubmit={manejarPago} className="text-start">
+          <form onSubmit={manejarPago} className="text-start" noValidate>
             
             <div className="mb-3">
-              <label className="form-label text-muted small mb-1">Número de tarjeta</label>
+              <label className="form-label text-muted small mb-1">Número de tarjeta <span className="text-danger">*</span></label>
               <input 
                 type="text" 
                 className="form-control bg-light"
@@ -74,13 +112,12 @@ function Pago({ totalPedido }: PagoProps) {
                 maxLength={16}
                 value={tarjeta}
                 onChange={(e) => setTarjeta(e.target.value.replace(/\D/g, ''))}
-                required
               />
             </div>
 
             <div className="row mb-3">
               <div className="col-6">
-                <label className="form-label text-muted small mb-1">Fecha de expiración</label>
+                <label className="form-label text-muted small mb-1">Fecha de expiración <span className="text-danger">*</span></label>
                 <input 
                   type="text" 
                   className="form-control"
@@ -88,12 +125,11 @@ function Pago({ totalPedido }: PagoProps) {
                   maxLength={5}
                   value={fecha}
                   onChange={(e) => setFecha(e.target.value)}
-                  required
                 />
               </div>
               <div className="col-6">
                 <label className="form-label text-muted small mb-1 d-flex justify-content-between">
-                  CVV <i className="bi bi-question-circle text-muted"></i>
+                  CVV <span className="text-danger">*</span> <i className="bi bi-question-circle text-muted"></i>
                 </label>
                 <div className="input-group">
                   <input 
@@ -103,7 +139,6 @@ function Pago({ totalPedido }: PagoProps) {
                     maxLength={3}
                     value={cvv}
                     onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
-                    required
                   />
                   <span className="input-group-text bg-white"><i className="bi bi-eye"></i></span>
                 </div>
@@ -111,12 +146,14 @@ function Pago({ totalPedido }: PagoProps) {
             </div>
 
             <div className="mb-4">
-              <label className="form-label text-muted small mb-1">Cuotas</label>
+              <label className="form-label text-muted small mb-1">Cuotas <span className="text-danger">*</span></label>
               <select 
                 className="form-select"
                 value={cuotas}
                 onChange={(e) => setCuotas(e.target.value)}
               >
+
+                <option value="">Selecciona las cuotas...</option>
                 <option value="Sin Cuotas">Sin Cuotas</option>
                 <option value="3 Cuotas sin interés">3 Cuotas sin interés</option>
                 <option value="6 Cuotas">6 Cuotas</option>
@@ -129,7 +166,7 @@ function Pago({ totalPedido }: PagoProps) {
               <span className="fs-4 fw-bold text-success">${totalPedido.toLocaleString('es-CL')}</span>
             </div>
 
-            
+
             <button 
               type="submit" 
               className={`btn w-100 py-2 fw-bold ${formularioCompleto ? 'btn-success' : 'btn-secondary'}`}
