@@ -15,10 +15,26 @@ function Pago({ totalPedido }: PagoProps) {
   const manejarPago = (e: FormEvent) => {
     e.preventDefault();
 
-    alert(`¡Pago exitoso por $${totalPedido.toLocaleString('es-CL')}! Tu pedido está en camino.`);
-    navigate('/productos');
-  };
+    if (tarjeta.length !== 16) {
+      alert('El número de tarjeta debe tener 16 dígitos');
+      return;
+    }
 
+    const regexFecha = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!regexFecha.test(fecha)) {
+      alert('Ingrese una fecha válida en formato MM/AA');
+      return;
+    }
+
+    if (cvv.length !== 3) {
+      alert('El CVV debe tener 3 dígitos');
+      return;
+    }
+
+    // 👇 GUARDAMOS EL TOTAL PARA LA BOLETA Y REDIRIGIMOS
+    localStorage.setItem('ultimoTotal', totalPedido.toString());
+    navigate('/boleta');
+  };
 
   const formularioCompleto = tarjeta.length === 16 && fecha.length >= 4 && cvv.length === 3;
 
@@ -36,7 +52,6 @@ function Pago({ totalPedido }: PagoProps) {
           
           <h5 className="fw-bold mb-4">Ingresa los datos de tu tarjeta:</h5>
 
-          {/* TARJETA VISUAL */}
           <div 
             className="mx-auto mb-4 p-3 rounded-3 text-white d-flex flex-column justify-content-between shadow"
             style={{ 
@@ -63,7 +78,7 @@ function Pago({ totalPedido }: PagoProps) {
             </div>
           </div>
 
-          <form onSubmit={manejarPago} className="text-start">
+          <form onSubmit={manejarPago} className="text-start" noValidate>
             
             <div className="mb-3">
               <label className="form-label text-muted small mb-1">Número de tarjeta</label>
@@ -74,7 +89,6 @@ function Pago({ totalPedido }: PagoProps) {
                 maxLength={16}
                 value={tarjeta}
                 onChange={(e) => setTarjeta(e.target.value.replace(/\D/g, ''))}
-                required
               />
             </div>
 
@@ -88,7 +102,6 @@ function Pago({ totalPedido }: PagoProps) {
                   maxLength={5}
                   value={fecha}
                   onChange={(e) => setFecha(e.target.value)}
-                  required
                 />
               </div>
               <div className="col-6">
@@ -103,7 +116,6 @@ function Pago({ totalPedido }: PagoProps) {
                     maxLength={3}
                     value={cvv}
                     onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
-                    required
                   />
                   <span className="input-group-text bg-white"><i className="bi bi-eye"></i></span>
                 </div>
@@ -129,7 +141,6 @@ function Pago({ totalPedido }: PagoProps) {
               <span className="fs-4 fw-bold text-success">${totalPedido.toLocaleString('es-CL')}</span>
             </div>
 
-            
             <button 
               type="submit" 
               className={`btn w-100 py-2 fw-bold ${formularioCompleto ? 'btn-success' : 'btn-secondary'}`}

@@ -5,15 +5,15 @@ import Footer from './componentes/organismos/Footer';
 import Inicio from './paginas/Inicio';
 import Productos from './paginas/Productos';
 import Contacto from './paginas/Contacto';
-import Nosotros from './paginas/Nosotros'; // 👈 Cambio de tu amigo
+import Nosotros from './paginas/Nosotros';
 import DetalleProducto from './paginas/DetalleProducto';
 import DondeEncontrarnos from './paginas/DondeEncontrarnos';
 import Login from './paginas/Login';
 import Registro from './paginas/Registro';
-import Despacho from './paginas/Despacho'; // 👈 Nuestro
-import Pago from './paginas/Pago'; // 👈 Nuestro
+import Despacho from './paginas/Despacho';
+import Pago from './paginas/Pago';
+import Boleta from './paginas/Boleta';
 
-// 👈 Rutas de Admin Nuestras
 import Admin from './paginas/Admin';
 import AdminProductos from './paginas/AdminProductos';
 import AdminUsuarios from './paginas/AdminUsuarios';
@@ -63,16 +63,14 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/productos" element={<Productos setTotalPedido={setTotalPedido} />} />
           <Route path="/producto/:id" element={<DetalleProducto />} />
-          
-          {/* 👇 Ruta cambiada a /nosotros */}
-          <Route path="/nosotros" element={<Nosotros />} /> 
-          
+          <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/donde-encontrarnos" element={<DondeEncontrarnos />} />
           <Route path="/contacto" element={<Contacto />} />
           
-          {/* 👇 Nuestras rutas de compra */}
+          {/* Rutas de Compra */}
           <Route path="/despacho" element={<Despacho totalPedido={totalPedido} />} />
           <Route path="/pago" element={<Pago totalPedido={totalPedido} />} />
+          <Route path="/boleta" element={<Boleta totalPedido={totalPedido} />} />
           
           <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
           <Route path="/registro" element={<Registro />} />
