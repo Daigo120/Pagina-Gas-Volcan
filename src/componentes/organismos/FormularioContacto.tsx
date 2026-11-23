@@ -5,22 +5,20 @@ function FormularioContacto() {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
+  const manejarEnvio = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
 
     if (nombre.trim() === "") {
       alert("Debe ingresar su nombre");
       return;
     }
 
-
     if (correo.trim() === "") {
       alert("Debe ingresar su correo");
       return;
     }
-
 
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!regexEmail.test(correo)) {
@@ -28,13 +26,42 @@ function FormularioContacto() {
       return;
     }
 
-
     if (mensaje.trim() === "") {
       alert("Debe ingresar un mensaje");
       return;
     }
 
-    alert("Formulario enviado correctamente");
+    // Conexión con el microservicio de mensajería
+    try {
+      setCargando(true);
+      
+      const respuesta = await fetch('http://localhost:8088/api/mensajeria', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nombre: nombre.trim(),
+          correo: correo.trim().toLowerCase(), // <-- CAMBIADO a 'correo'
+          mensaje: mensaje.trim()
+        })
+      });
+
+      if (respuesta.ok) {
+        alert("¡Mensaje enviado! El administrador se contactará contigo pronto.");
+        // Limpiamos el formulario
+        setNombre("");
+        setCorreo("");
+        setMensaje("");
+      } else {
+        alert("Error al enviar el mensaje. Intente nuevamente.");
+      }
+    } catch (error) {
+      console.error("Error de conexión:", error);
+      alert("No se pudo conectar con el servidor de mensajería.");
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -61,8 +88,12 @@ function FormularioContacto() {
         alCambiar={setMensaje}
       />
 
-      <button type="submit" className="btn btn-warning mt-3">
-        Enviar mensaje
+      <button 
+        type="submit" 
+        className="btn btn-warning mt-3" 
+        disabled={cargando}
+      >
+        {cargando ? 'Enviando...' : 'Enviar mensaje'}
       </button>
     </form>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react'; 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './componentes/organismos/Navbar';
 import Footer from './componentes/organismos/Footer';
@@ -16,14 +16,15 @@ import Boleta from './paginas/Boleta';
 import Admin from './paginas/Admin';
 import AdminProductos from './paginas/AdminProductos';
 import AdminUsuarios from './paginas/AdminUsuarios';
+import AdminMensajes from './paginas/AdminMensajes';
+import AdminPedidos from './paginas/AdminPedidos';
 
 import type { Usuario } from './tipos/Usuario';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { inyectarAdminDePrueba } from './servicios/usuariosServicio';
 
 interface ItemCarrito {
-  id: string | number;
+  id: number;
   nombre: string;
   precio: number;
   cantidad: number;
@@ -39,7 +40,7 @@ function App() {
     }
   });
 
-  const handleAgregarCarrito = (id: string, nombre: string, precio: number) => {
+  const handleAgregarCarrito = (id: number, nombre: string, precio: number) => {
     setCarrito((prevCarrito) => {
       const existe = prevCarrito.find((item) => item.id === id);
       if (existe) {
@@ -51,15 +52,11 @@ function App() {
     });
   };
 
-  const handleQuitarCarrito = (id: string | number) => {
+  const handleQuitarCarrito = (id: number) => {
     setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
   };
 
   const [totalPedido, setTotalPedido] = useState(0);
-
-  useEffect(() => {
-    inyectarAdminDePrueba();
-  }, []);
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuarioLogueado');
@@ -67,7 +64,7 @@ function App() {
   };
 
   const RutaProtegidaAdmin = ({ children }: { children: React.ReactNode }) => {
-    if (!usuarioLogueado || usuarioLogueado.tipoUsuario !== 'admin') {
+    if (!usuarioLogueado || usuarioLogueado.rol !== 'ADMIN') {
       return <Navigate to="/login" replace />;
     }
     return <>{children}</>;
@@ -97,20 +94,20 @@ function App() {
           />
           <Route path="/producto/:id" element={<DetalleProducto />} />
           
-         
           <Route path="/nosotros" element={<Nosotros />} /> 
           
           <Route path="/donde-encontrarnos" element={<DondeEncontrarnos />} />
           <Route path="/contacto" element={<Contacto />} />
           
-          
           <Route path="/despacho" element={<Despacho totalPedido={totalPedido} />} />
           <Route path="/pago" element={<Pago totalPedido={totalPedido} />} />
-          <Route path="/boleta" element={<Boleta totalPedido={totalPedido} />} />
+          
+          {/* CORREGIDO: Boleta ya no recibe totalPedido como prop */}
+          <Route path="/boleta" element={<Boleta />} />
+          
           <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />
           <Route path="/registro" element={<Registro />} />
 
-          
           <Route 
             path="/admin" 
             element={
@@ -135,7 +132,25 @@ function App() {
               </RutaProtegidaAdmin>
             } 
           />
+          <Route 
+          path="/admin/mensajes" 
+          element={
+          <RutaProtegidaAdmin>
+          <AdminMensajes />
+            </RutaProtegidaAdmin>
+          } 
+          />
+          <Route 
+          path="/admin/pedidos" 
+          element={
+          <RutaProtegidaAdmin>
+          <AdminPedidos />
+          </RutaProtegidaAdmin>
+          } 
+          />
         </Routes>
+
+        
       </main>
       <Footer />
     </div>

@@ -10,10 +10,8 @@ interface NavbarProps {
 function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
   const navigate = useNavigate();
   
-  
   const [menuAbierto, setMenuAbierto] = useState(false);
 
-  
   const cerrarMenu = () => setMenuAbierto(false);
 
   const manejarCerrarSesion = () => {
@@ -46,7 +44,8 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
             <Link className="nav-link text-white" to="/nosotros" onClick={cerrarMenu}>Nosotros</Link>
             <Link className="nav-link text-white" to="/donde-encontrarnos" onClick={cerrarMenu}>Dónde Encontrarnos</Link>
 
-            {usuarioLogueado && usuarioLogueado.tipoUsuario === 'admin' && (
+            {/* CORREGIDO: Ahora validamos el campo 'rol' con el valor 'ADMIN' */}
+            {usuarioLogueado && usuarioLogueado.rol === 'ADMIN' && (
               <Link className="nav-link text-warning fw-bold" to="/admin" onClick={cerrarMenu}>
                 Panel Admin
               </Link>

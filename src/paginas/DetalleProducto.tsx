@@ -1,78 +1,102 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { productosServicio, type Producto } from '../servicios/productosServicio';
+
+// 1. Definimos la interfaz con los campos que devuelve tu backend de Spring Boot
+interface Producto {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  stock: number;
+  imagenUrl: string; // Ojo: en tu tabla SQL se llama 'imagen_url', pero Spring lo mapea a 'imagenUrl' por defecto
+}
 
 function DetalleProducto() {
-  const { id } = useParams();
+  const { id } = useParams(); // Este 'id' viene de la URL (ej: /producto/1)
   const [producto, setProducto] = useState<Producto | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (id) {
-      const todosLosProductos = productosServicio.obtenerTodos();
-      const encontrado = todosLosProductos.find((item) => item.codigo === id);
-      setProducto(encontrado || null);
-    }
+    const cargarProducto = async () => {
+      if (!id) return;
+
+      try {
+        setCargando(true);
+        // 2. Hacemos la petición al microservicio de Productos (Puerto 8082)
+        const respuesta = await fetch(`http://localhost:8088/api/productos/${id}`);
+        
+        if (respuesta.ok) {
+          const datos = await respuesta.json();
+          setProducto(datos);
+        } else {
+          setError('Producto no encontrado');
+        }
+      } catch (err) {
+        console.error("Error de red:", err);
+        setError('No se pudo conectar con el servidor de productos.');
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarProducto();
   }, [id]);
 
-  if (!producto) {
+  if (cargando) {
     return (
       <div className="container mt-5 text-center">
-        <h2>Producto no encontrado</h2>
+        <h3>Cargando producto...</h3>
+      </div>
+    );
+  }
+
+  if (error || !producto) {
+    return (
+      <div className="container mt-5 text-center">
+        <h2>{error || 'Producto no encontrado'}</h2>
         <Link to="/productos" className="btn btn-outline-secondary mt-3">Volver a productos</Link>
       </div>
     );
   }
 
- 
-  const imagenes: Record<string, string> = {
-    "CL001": "cilindro_5kg.png",
-    "CL002": "cilindro_11kg.png",
-    "CL003": "cilindro_15gk.png",
-    "CL004": "cilindro_45kg.png",
-    "RG001": "Regulador.jpg",
-    "RG002": "Regulador2.jpg",
-    "MG001": "manguera.jpg",
-    "MG004": "kit.jpg"
-  };
-
-  const descripciones: Record<string, string> = {
-    "CL001": "Para uso residencial (cocina, calefacción pequeña).",
-    "CL002": "Cilindro estándar doméstico. El más utilizado en hogares.",
-    "CL003": "Cilindro de mayor capacidad para hogares de alto consumo.",
-    "CL004": "Cilindro industrial. Uso comercial: restaurantes, talleres.",
-    "RG001": "Regulador de 1 etapa para cilindros 5, 11 y 15 kg.",
-    "RG002": "Regulador para cocinas industriales o equipos de mayor consumo.",
-    "MG001": "Manguera flexible homologada. Diámetro interior 9mm.",
-    "MG004": "Regulador + manguera 1.5m + abrazaderas."
-  };
-
-  
-  const imagenFinal = producto.imagen || imagenes[producto.codigo] || 'cilindro_5kg.png';
-  const descripcionFinal = producto.descripcion || descripciones[producto.codigo] || producto.categoria;
+  // 3. Si tu base de datos no tiene la imagen, usamos una por defecto
+  // (Puedes mantener tu lógica de imágenes locales si quieres, pero lo ideal es usar producto.imagenUrl)
+  const imagenFinal = `/${producto.imagenUrl}`; 
 
   return (
     <div className="container mt-4">
       <h1>Detalle del Producto</h1>
       
-      <img
-        src={`/img/${imagenFinal}`}
-        alt={producto.nombre}
-        style={{ width: '300px', objectFit: 'contain' }}
-      />
-      
-      <h2 className="mt-3">{producto.nombre}</h2>
-      
-      
-      <p className="text-muted">{descripcionFinal}</p>
-      <p className="text-muted text-capitalize small">Categoría: {producto.categoria}</p>
-      
-      <p className="fw-bold text-success fs-4">${producto.precio.toLocaleString('es-CL')}</p>
-      
-      <p className="text-dark fw-bold">Stock disponible: {producto.stock} unidades</p>
-      
-      <Link to="/productos" className="btn btn-outline-secondary mb-3 mt-3">
-        Volver a productos
-      </Link>
+      <div className="row mt-4">
+        <div className="col-md-5 text-center">
+          <img
+            src={imagenFinal}
+            alt={producto.nombre}
+            style={{ width: '100%', maxWidth: '300px', objectFit: 'contain' }}
+            className="img-fluid shadow-sm rounded"
+          />
+        </div>
+        
+        <div className="col-md-7">
+          <h2 className="fw-bold">{producto.nombre}</h2>
+          <p className="text-muted fs-5">{producto.descripcion}</p>
+          
+          <hr />
+          
+          <p className="fw-bold text-success fs-3 mb-1">
+            ${producto.precio.toLocaleString('es-CL')}
+          </p>
+          
+          <p className={`fw-bold ${producto.stock > 0 ? 'text-success' : 'text-danger'}`}>
+            {producto.stock > 0 ? `Stock disponible: ${producto.stock} unidades` : 'Sin stock'}
+          </p>
+          
+          <Link to="/productos" className="btn btn-outline-secondary mt-4">
+            Volver a productos
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

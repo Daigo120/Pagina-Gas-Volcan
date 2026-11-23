@@ -1,27 +1,105 @@
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-interface BoletaProps {
-  totalPedido: number;
+interface BoletaDB {
+  id: number;
+  pedidoId: number;
+  usuarioId: number;
+  montoTotal: number;
+  fechaEmision: string;
+  detalleJson: string;
 }
 
-function Boleta({ totalPedido }: BoletaProps) {
+// Interfaz para los productos dentro de la boleta
+interface DetalleItem {
+  productoId: number;
+  cantidad: number;
+  precioUnitario: number;
+  nombreProducto: string; 
+}
+
+function Boleta() {
   const navigate = useNavigate();
+  const [boleta, setBoleta] = useState<BoletaDB | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
 
+  useEffect(() => {
+    const generarBoleta = async () => {
+      const pedidoIdString = localStorage.getItem('pedido_actual_id');
+      
+      if (!pedidoIdString) {
+        setError('No se encontró información del pedido.');
+        setCargando(false);
+        return;
+      }
 
-  const totalFinal = totalPedido || Number(localStorage.getItem('ultimoTotal')) || 0;
+      const pedidoId = parseInt(pedidoIdString);
 
-  const folio = Math.floor(100000 + Math.random() * 900000);
-  const fechaActual = new Date().toLocaleString('es-CL');
+      try {
+        const token = localStorage.getItem('token');
+        const respuesta = await fetch('http://localhost:8088/api/boletas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ pedidoId })
+        });
 
+        if (respuesta.ok) {
+          const datosBoleta = await respuesta.json();
+          setBoleta(datosBoleta);
+        } else {
+          setError('Error al generar la boleta. Intente nuevamente.');
+        }
+      } catch (err) {
+        console.error("Error de red:", err);
+        setError('No se pudo conectar con el servidor de boletas.');
+      } finally {
+        setCargando(false);
+      }
+    };
 
-  const neto = Math.round(totalFinal / 1.19);
-  const iva = totalFinal - neto;
+    generarBoleta();
+  }, []);
 
   const terminarCompra = () => {
-
+    localStorage.removeItem('pedido_actual_id');
+    localStorage.removeItem('pedido_actual_total');
     localStorage.removeItem('ultimoTotal');
     navigate('/');
   };
+
+  if (cargando) {
+    return (
+      <div className="container mt-5 text-center">
+        <h3>Generando tu boleta electrónica...</h3>
+      </div>
+    );
+  }
+
+  if (error || !boleta) {
+    return (
+      <div className="container mt-5 text-center">
+        <div className="alert alert-danger">{error || 'No se pudo cargar la boleta.'}</div>
+        <Link to="/productos" className="btn btn-primary">Volver a Productos</Link>
+      </div>
+    );
+  }
+
+  const totalFinal = boleta.montoTotal;
+  const neto = Math.round(totalFinal / 1.19);
+  const iva = totalFinal - neto;
+  const fechaActual = new Date(boleta.fechaEmision).toLocaleString('es-CL');
+
+  // Parseamos el JSON de detalles que viene del backend
+  let detallesParseados: DetalleItem[] = [];
+  try {
+    if (boleta.detalleJson) {
+      detallesParseados = JSON.parse(boleta.detalleJson);
+    }
+  } catch (e) {
+    console.error("Error al leer el detalle de la boleta", e);
+  }
 
   return (
     <div className="container mt-5 mb-5 d-flex justify-content-center">
@@ -32,7 +110,7 @@ function Boleta({ totalPedido }: BoletaProps) {
         <div className="text-center mb-4">
           <h5 className="fw-bold mb-1">R.U.T. 77.194.706-9</h5>
           <h6 className="fw-bold border border-dark border-2 py-2">BOLETA ELECTRÓNICA</h6>
-          <h4 className="fw-bold mt-2">{folio}</h4>
+          <h4 className="fw-bold mt-2">{boleta.id.toString().padStart(6, '0')}</h4>
           <hr />
           <p className="small mb-0">Sii - Santiago</p>
           <p className="small mb-0">{fechaActual}</p>
@@ -53,14 +131,36 @@ function Boleta({ totalPedido }: BoletaProps) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Compra de Productos Gas El Volcán</td>
-              <td className="text-end">${neto.toLocaleString('es-CL')}</td>
-            </tr>
+            {/* Si por alguna razón no hay detalles, mostramos un texto genérico */}
+            {detallesParseados.length === 0 && (
+              <tr>
+                <td>Compra de Productos Gas El Volcán (Pedido #{boleta.pedidoId})</td>
+                <td className="text-end">${neto.toLocaleString('es-CL')}</td>
+              </tr>
+            )}
+
+            {/* Recorremos los productos y los pintamos */}
+            {detallesParseados.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  {item.nombreProducto || `Producto ID: ${item.productoId}`} <br/>
+                  <span className="text-muted" style={{ fontSize: '0.8rem' }}>
+                    {item.cantidad} x ${item.precioUnitario.toLocaleString('es-CL')}
+                  </span>
+                </td>
+                <td className="text-end align-middle">
+                  ${(item.cantidad * item.precioUnitario).toLocaleString('es-CL')}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
         <div className="border-top border-dark pt-2">
+          <div className="d-flex justify-content-between small">
+            <span>Neto:</span>
+            <span>${neto.toLocaleString('es-CL')}</span>
+          </div>
           <div className="d-flex justify-content-between small">
             <span>Iva (19%):</span>
             <span>${iva.toLocaleString('es-CL')}</span>

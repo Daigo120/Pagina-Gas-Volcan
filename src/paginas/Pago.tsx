@@ -11,52 +11,111 @@ function Pago({ totalPedido }: PagoProps) {
   const [fecha, setFecha] = useState('');
   const [cvv, setCvv] = useState('');
   const [cuotas, setCuotas] = useState('Sin Cuotas');
+  const [cargando, setCargando] = useState(false);
+  const token = localStorage.getItem('token');
 
-  const manejarPago = (e: FormEvent) => {
+  const manejarPago = async (e: FormEvent) => {
     e.preventDefault();
 
-
+    // Validaciones
     if (tarjeta.trim() === '') {
       alert('Debe ingresar el número de tarjeta.');
       return;
     }
-
     if (tarjeta.length !== 16) {
       alert('El número de tarjeta debe tener 16 dígitos.');
       return;
     }
-
     if (fecha.trim() === '') {
       alert('Debe ingresar la fecha de expiración.');
       return;
     }
-
     const regexFecha = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!regexFecha.test(fecha)) {
       alert('Ingrese una fecha válida en formato MM/AA.');
       return;
     }
-
     if (cvv.trim() === '') {
       alert('Debe ingresar el CVV.');
       return;
     }
-
     if (cvv.length !== 3) {
       alert('El CVV debe tener 3 dígitos.');
       return;
     }
-
     if (!cuotas) {
       alert('Debe seleccionar la cantidad de cuotas.');
       return;
     }
 
+    const pedidoIdString = localStorage.getItem('pedido_actual_id');
+    
+    if (!pedidoIdString) {
+      alert('No se encontró el pedido. Por favor, vuelve a realizar la compra.');
+      navigate('/productos');
+      return;
+    }
 
-    localStorage.setItem('ultimoTotal', totalPedido.toString());
-    navigate('/boleta');
+    const pedidoId = parseInt(pedidoIdString);
+
+    const pagoPayload = {
+      pedidoId: pedidoId,
+      monto: totalPedido,
+      metodoPago: 'TARJETA'
+    };
+
+    try {
+      setCargando(true);
+      const respuesta = await fetch('http://localhost:8088/api/pagos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(pagoPayload)
+      });
+
+      if (respuesta.ok) {
+        const pagoRealizado = await respuesta.json();
+        
+        if (pagoRealizado.estado === 'APROBADO') {
+          localStorage.setItem('ultimoTotal', totalPedido.toString());
+          
+          // --- INICIO DE LA LLAMADA A DESPACHO (PUERTO 8086) ---
+          try {
+            const despachoResponse = await fetch('http://localhost:8088/api/despacho', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`
+               },
+              body: JSON.stringify({ pedidoId: pedidoId })
+            });
+            
+            if (!despachoResponse.ok) {
+              const errorText = await despachoResponse.text();
+              console.warn("El pago fue aprobado, pero hubo un problema al generar el despacho:", errorText);
+            } else {
+              console.log("Despacho generado exitosamente.");
+            }
+          } catch (err) {
+            console.error("Error de red al generar despacho:", err);
+          }
+          // --- FIN DE LA LLAMADA A DESPACHO ---
+
+          navigate('/boleta');
+        } else {
+          alert('El pago fue rechazado. Intente con otra tarjeta.');
+        }
+      } else {
+        alert('Error al procesar el pago. Intente nuevamente.');
+      }
+    } catch (error) {
+      console.error("Error de red:", error);
+      alert('No se pudo conectar con el servidor de pagos. ¿Está corriendo Spring Boot?');
+    } finally {
+      setCargando(false);
+    }
   };
-
 
   const formularioCompleto = tarjeta.length === 16 && fecha.length >= 4 && cvv.length === 3;
 
@@ -73,7 +132,6 @@ function Pago({ totalPedido }: PagoProps) {
         <div className="card-body p-4 text-center">
           
           <h5 className="fw-bold mb-4">Ingresa los datos de tu tarjeta:</h5>
-
 
           <div 
             className="mx-auto mb-4 p-3 rounded-3 text-white d-flex flex-column justify-content-between shadow"
@@ -152,7 +210,6 @@ function Pago({ totalPedido }: PagoProps) {
                 value={cuotas}
                 onChange={(e) => setCuotas(e.target.value)}
               >
-
                 <option value="">Selecciona las cuotas...</option>
                 <option value="Sin Cuotas">Sin Cuotas</option>
                 <option value="3 Cuotas sin interés">3 Cuotas sin interés</option>
@@ -166,18 +223,17 @@ function Pago({ totalPedido }: PagoProps) {
               <span className="fs-4 fw-bold text-success">${totalPedido.toLocaleString('es-CL')}</span>
             </div>
 
-
             <button 
               type="submit" 
-              className={`btn w-100 py-2 fw-bold ${formularioCompleto ? 'btn-success' : 'btn-secondary'}`}
-              disabled={!formularioCompleto}
+              className={`btn w-100 py-2 fw-bold ${formularioCompleto && !cargando ? 'btn-success' : 'btn-secondary'}`}
+              disabled={!formularioCompleto || cargando}
               style={{ 
-                backgroundColor: formularioCompleto ? '' : '#d0d6e1', 
-                color: formularioCompleto ? '#fff' : '#6c757d', 
+                backgroundColor: formularioCompleto && !cargando ? '' : '#d0d6e1', 
+                color: formularioCompleto && !cargando ? '#fff' : '#6c757d', 
                 border: 'none' 
               }}
             >
-              Pagar
+              {cargando ? 'Procesando pago...' : 'Pagar'}
             </button>
 
           </form>

@@ -12,8 +12,9 @@ function Despacho({ totalPedido }: DespachoProps) {
   const [zona, setZona] = useState('');
   const [horario, setHorario] = useState('');
   const [notas, setNotas] = useState('');
+  const [cargando, setCargando] = useState(false);
 
-  const manejarEnvio = (e: FormEvent) => {
+  const manejarEnvio = async (e: FormEvent) => {
     e.preventDefault();
     
     if (direccion.trim() === '') {
@@ -28,8 +29,69 @@ function Despacho({ totalPedido }: DespachoProps) {
       alert('Debe seleccionar un horario preferente');
       return;
     }
-    
-    navigate('/pago'); 
+
+    // 1. Recuperamos el carrito y el usuario del localStorage
+    const carritoString = localStorage.getItem('carrito_pendiente');
+    const usuarioString = localStorage.getItem('usuarioLogueado');
+
+    if (!carritoString || !usuarioString) {
+      alert('Hubo un problema con tu sesión o carrito. Vuelve a intentarlo.');
+      navigate('/productos');
+      return;
+    }
+
+    const carrito = JSON.parse(carritoString);
+    const usuario = JSON.parse(usuarioString);
+
+    // 2. Armamos el JSON directamente (los IDs ya son numéricos)
+    const pedidoPayload = {
+      usuarioId: usuario.id,
+      total: totalPedido, // <-- AGREGADO: Viene de las props del componente
+      estado: 'PENDIENTE', // <-- AGREGADO: Estado inicial obligatorio
+      direccion: direccion.trim(),
+      horarioEntrega: horario,
+      notas: notas.trim(), // <-- AGREGADO (Ver punto 2 abajo)
+      detalles: carrito.map((item: any) => ({
+        productoId: item.id, 
+        cantidad: item.cantidad
+      }))
+    };
+
+    // 3. Enviamos al backend (pedidos-service)
+    try {
+      setCargando(true);
+      const token = localStorage.getItem('token');
+      const respuesta = await fetch('http://localhost:8088/api/pedidos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(pedidoPayload)
+      });
+
+      if (respuesta.ok) {
+        const pedidoCreado = await respuesta.json();
+        
+        // Guardamos el ID del pedido y el total para las siguientes pantallas
+        localStorage.setItem('pedido_actual_id', pedidoCreado.id.toString());
+        localStorage.setItem('pedido_actual_total', pedidoCreado.total.toString());
+        
+        // Limpiamos el carrito pendiente
+        localStorage.removeItem('carrito_pendiente');
+        
+        navigate('/pago'); 
+      } else {
+        const errorData = await respuesta.text();
+        console.error("Error del servidor:", errorData);
+        alert('Error al crear el pedido. Revisa la consola para más detalles.');
+      }
+    } catch (error) {
+      console.error("Error de red:", error);
+      alert('No se pudo conectar con el servidor de pedidos. ¿Está corriendo Spring Boot?');
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -40,7 +102,6 @@ function Despacho({ totalPedido }: DespachoProps) {
           Volver a Productos
         </Link>
       </div>
-
 
       <div className="table-responsive mb-5 shadow-sm">
         <table className="table table-bordered align-middle mb-0">
@@ -93,13 +154,11 @@ function Despacho({ totalPedido }: DespachoProps) {
         </table>
       </div>
 
-
       <div className="card shadow-sm mx-auto" style={{ maxWidth: '800px' }}>
         <div className="card-header bg-warning text-dark fw-bold py-3 text-center">
           Completa los Datos para la Entrega
         </div>
         <div className="card-body p-4">
-
           <form onSubmit={manejarEnvio} noValidate>
             
             <div className="mb-3">
@@ -122,7 +181,6 @@ function Despacho({ totalPedido }: DespachoProps) {
                   onChange={(e) => setZona(e.target.value)}
                 >
                   <option value="">Selecciona tu zona...</option>
-
                   <option value="Zona Centro">Zona Centro (Centro Cívico, Población Sta Marta)</option>
                   <option value="Zona Oriente">Zona Oriente (Ciudad Empresarial, La Piramide)</option>
                   <option value="Zona Norte">Zona Norte (La Pincoya, Patria Nueva, Las Bandurrias)</option>
@@ -164,8 +222,8 @@ function Despacho({ totalPedido }: DespachoProps) {
                   ${totalPedido.toLocaleString('es-CL')}
                 </span>
               </div>
-              <button type="submit" className="btn btn-success fw-bold px-4 py-2">
-                Continuar al Pago →
+              <button type="submit" className="btn btn-success fw-bold px-4 py-2" disabled={cargando}>
+                {cargando ? 'Procesando...' : 'Continuar al Pago →'}
               </button>
             </div>
 

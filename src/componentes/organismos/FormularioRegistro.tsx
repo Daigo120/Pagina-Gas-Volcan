@@ -1,7 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import CampoFormulario from "../moleculas/CampoFormulario";
-import { usuariosServicio } from "../../servicios/usuariosServicio";
 import type { TipoUsuario } from "../../tipos/Usuario";
 
 function FormularioRegistro() {
@@ -12,20 +11,22 @@ function FormularioRegistro() {
   const [password, setPassword] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState("");
   const [direccion, setDireccion] = useState("");
+  const [errorMensaje, setErrorMensaje] = useState(""); // Para mostrar errores del backend
   const navigate = useNavigate();
 
-  const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
+  // Cambiamos a async para usar await
+  const manejarEnvio = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMensaje("");
 
     const correoLimpio = correo.trim().toLowerCase();
     const passwordLimpia = password.trim();
 
-    
+    // --- TUS VALIDACIONES SE MANTIENEN IGUAL ---
     if (!run.trim()) {
       alert("Debe ingresar su RUN.");
       return;
     } 
-
 
     if (
       !/^\d{1,8}[\dKk]$/.test(run.replace(/[.-]/g, '')) || 
@@ -44,82 +45,84 @@ function FormularioRegistro() {
       return;
     }
 
-  
     if (!nombre.trim()) {
       alert("Debe ingresar su nombre.");
       return;
     }
 
-  
     if (!apellidos.trim()) {
       alert("Debe ingresar sus apellidos.");
       return;
     }
 
-  
     if (!correoLimpio) {
       alert("Debe ingresar su correo electrónico.");
       return;
     }
 
-  
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!regexEmail.test(correoLimpio)) {
       alert("Ingrese un correo electrónico válido.");
       return;
     }
 
-   
     if (!passwordLimpia) {
       alert("Debe ingresar su contraseña.");
       return;
     }
 
-  
     if (passwordLimpia.length < 4 || passwordLimpia.length > 10) {
       alert("La contraseña debe tener entre 4 y 10 caracteres.");
       return;
     }
 
-    
     if (!tipoUsuario || !tipoUsuario.trim()) {
       alert("Debe seleccionar un tipo de usuario.");
       return;
     }
 
-   
     if (!direccion.trim()) {
       alert("Debe ingresar su dirección.");
       return;
     }
 
-   
-    if (usuariosServicio.existeCorreo(correo)) {
-      alert('Este correo electrónico ya está registrado.');
-      return;
+    // --- CONEXIÓN AL BACKEND (SPRING BOOT) ---
+    try {
+      const respuesta = await fetch("http://localhost:8088/api/usuarios/registro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          run: run.trim(),
+          nombre: nombre.trim(),
+          apellidos: apellidos.trim(),
+          correo: correoLimpio,
+          password: passwordLimpia,
+          tipoUsuario: tipoUsuario,
+          direccion: direccion.trim()
+        })
+      });
+
+      if (respuesta.ok) {
+        // El backend responde con status 200
+        alert("¡Registro exitoso! Por favor, inicia sesión.");
+        navigate("/login");
+      } else {
+        // Si el backend responde con error (ej: correo duplicado)
+        setErrorMensaje("Error al registrar. El correo o RUN ya podrían estar en uso.");
+      }
+    } catch (error) {
+      console.error("Error de conexión:", error);
+      setErrorMensaje("No se pudo conectar con el servidor. Intente más tarde.");
     }
-
-    
-    const usuariosGuardados = JSON.parse(localStorage.getItem("usuarios_db") || "[]");
-    const nuevoUsuario = { 
-      run: run.trim(), 
-      nombre: nombre.trim(), 
-      apellidos: apellidos.trim(), 
-      correo: correoLimpio, 
-      password: passwordLimpia, 
-      tipoUsuario: tipoUsuario as TipoUsuario,
-      direccion: direccion.trim() 
-    };
-
-    usuariosGuardados.push(nuevoUsuario);
-    localStorage.setItem("usuarios_db", JSON.stringify(usuariosGuardados));
-
-    alert("¡Registro exitoso! Por favor, inicia sesión.");
-    navigate("/login");
   };
 
   return (
     <form onSubmit={manejarEnvio} noValidate>
+      {/* Mostramos el error si el backend falla */}
+      {errorMensaje && <div className="alert alert-danger">{errorMensaje}</div>}
+
       <div className="row">
         <div className="col-md-6">
           <CampoFormulario etiqueta="RUN (sin puntos ni guion)" tipo="text" nombre="run" valor={run} alCambiar={setRun} />

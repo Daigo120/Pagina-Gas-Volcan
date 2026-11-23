@@ -1,8 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CampoFormulario from '../moleculas/CampoFormulario';
-import { usuariosServicio } from "../../servicios/usuariosServicio";
-
 import type { Usuario } from '../tipos/Usuario';
 
 interface FormularioLoginProps {
@@ -15,23 +13,20 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
+  const manejarLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-
+    setError('');
 
     if (correo.trim() === "") {
       alert("Debe ingresar su correo");
       return;
     }
 
-
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!regexEmail.test(correo)) {
       alert("Ingrese un correo válido");
       return;
     }
-
 
     if (password.trim() === "") {
       alert("Debe ingresar una contraseña");
@@ -42,13 +37,36 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
       return;
     }
 
-    const encontrado = usuariosServicio.buscarPorCredenciales(correo, password);
-    if (encontrado) {
-      usuariosServicio.guardarSesion(encontrado);
-      setUsuarioLogueado(encontrado);
-      navigate('/');
-    } else {
-      alert('Correo o contraseña incorrectos.');
+    // CONEXIÓN AL BACKEND (Spring Boot)
+    try {
+      const respuesta = await fetch('http://localhost:8088/api/usuarios/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ correo, password })
+      });
+
+      if (respuesta.ok) {
+        // --- CAMBIO IMPORTANTE: Ahora recibimos token y usuario ---
+        const data = await respuesta.json(); 
+        
+        // Guardamos el Token JWT
+        localStorage.setItem('token', data.token); 
+        
+        // Guardamos los datos del usuario
+        localStorage.setItem('usuarioLogueado', JSON.stringify(data.usuario)); 
+        
+        // Actualizamos el estado global en App.tsx
+        setUsuarioLogueado(data.usuario); 
+        
+        navigate('/');
+      } else {
+        setError('Correo o contraseña incorrectos.');
+      }
+    } catch (err) {
+      console.error("Error al conectar con el servidor:", err);
+      setError('No se pudo conectar con el servidor. Intente más tarde.');
     }
   };
 
