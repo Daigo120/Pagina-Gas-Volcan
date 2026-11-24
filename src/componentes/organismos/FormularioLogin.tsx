@@ -37,7 +37,7 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
       return;
     }
 
-    // CONEXIÓN AL BACKEND (Spring Boot)
+   
     try {
       const respuesta = await fetch('http://localhost:8088/api/usuarios/login', {
         method: 'POST',
@@ -48,16 +48,16 @@ function FormularioLogin({ setUsuarioLogueado }: FormularioLoginProps) {
       });
 
       if (respuesta.ok) {
-        // --- CAMBIO IMPORTANTE: Ahora recibimos token y usuario ---
+       
         const data = await respuesta.json(); 
         
-        // Guardamos el Token JWT
+      
         localStorage.setItem('token', data.token); 
         
-        // Guardamos los datos del usuario
+        
         localStorage.setItem('usuarioLogueado', JSON.stringify(data.usuario)); 
         
-        // Actualizamos el estado global en App.tsx
+      
         setUsuarioLogueado(data.usuario); 
         
         navigate('/');

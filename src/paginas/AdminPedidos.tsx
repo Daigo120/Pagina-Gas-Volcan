@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchApi } from '../servicios/api';
 
-// --- Interfaces ---
+
 interface DetallePedido {
   id: number;
   productoId: number;
@@ -66,31 +67,31 @@ function AdminPedidos() {
     const cargarDatos = async () => {
       try {
         setCargando(true);
-        const token = localStorage.getItem('token'); // <-- OBTENEMOS TOKEN
+        const token = localStorage.getItem('token'); 
         
-        // 1. Traer Pedidos
-        const resPedidos = await fetch('http://localhost:8088/api/pedidos', {
-          headers: { 'Authorization': `Bearer ${token}` } // <-- ENVIAMOS TOKEN
+       
+        const resPedidos = await fetchApi('/pedidos', {
+          headers: { 'Authorization': `Bearer ${token}` } 
         });
         if (!resPedidos.ok) throw new Error('Error al cargar pedidos');
         const dataPedidos: Pedido[] = await resPedidos.json();
 
-        // 2. Traer Despachos
+        
         let dataDespachos: Despacho[] = [];
         try {
-          const resDespachos = await fetch('http://localhost:8088/api/despacho', {
-            headers: { 'Authorization': `Bearer ${token}` } // <-- ENVIAMOS TOKEN
+          const resDespachos = await fetchApi('/despacho', {
+            headers: { 'Authorization': `Bearer ${token}` } 
           });
           if (resDespachos.ok) dataDespachos = await resDespachos.json();
         } catch (e) {
           console.warn("No se pudo conectar con el microservicio de despacho.");
         }
 
-        // 3. Traer Usuarios
+        
         let dataUsuarios: Usuario[] = [];
         try {
           const resUsuarios = await fetch('http://localhost:8088/api/usuarios', {
-            headers: { 'Authorization': `Bearer ${token}` } // <-- ENVIAMOS TOKEN
+            headers: { 'Authorization': `Bearer ${token}` } 
           });
           if (resUsuarios.ok) dataUsuarios = await resUsuarios.json();
         } catch (e) {
@@ -128,9 +129,9 @@ function AdminPedidos() {
     setCargandoBoleta(true);
 
     try {
-      const token = localStorage.getItem('token'); // <-- OBTENEMOS TOKEN
-      const res = await fetch(`http://localhost:8088/api/boletas/pedido/${pedido.id}`, {
-        headers: { 'Authorization': `Bearer ${token}` } // <-- ENVIAMOS TOKEN
+      const token = localStorage.getItem('token'); 
+      const res = await fetchApi(`/boletas/pedido/${pedido.id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
         const dataBoleta: BoletaDB = await res.json();

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { fetchApi } from '../servicios/api';
 
 interface Mensaje {
   id: number;
@@ -15,15 +16,15 @@ function AdminMensajes() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [cargando, setCargando] = useState(true);
 
-  // Estados para el modal de respuesta
+ 
   const [mensajeSeleccionado, setMensajeSeleccionado] = useState<Mensaje | null>(null);
   const [textoRespuesta, setTextoRespuesta] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  // Cargar los mensajes desde Spring Boot
+  
   const cargarMensajes = async () => {
     try {
-      const res = await fetch('http://localhost:8088/api/mensajeria');
+      const res = await fetchApi('/mensajeria');
       if (res.ok) {
         const data = await res.json();
         setMensajes(data);
@@ -39,19 +40,19 @@ function AdminMensajes() {
     cargarMensajes();
   }, []);
 
-  // Abrir el modal con el mensaje seleccionado
+ 
   const abrirModalRespuesta = (mensaje: Mensaje) => {
     setMensajeSeleccionado(mensaje);
-    setTextoRespuesta(''); // Limpiamos la caja de texto al abrir
+    setTextoRespuesta(''); 
   };
 
-  // Cerrar el modal
+  
   const cerrarModal = () => {
     setMensajeSeleccionado(null);
     setTextoRespuesta('');
   };
 
-  // Enviar la respuesta real al backend
+  
   const enviarRespuesta = async () => {
     if (!textoRespuesta.trim()) {
       alert("Por favor, escribe una respuesta antes de enviar.");
@@ -62,16 +63,16 @@ function AdminMensajes() {
 
     try {
       setEnviando(true);
-      // Enviamos la respuesta escrita por el admin
-      const res = await fetch(`http://localhost:8088/api/mensajeria/${mensajeSeleccionado.id}/responder`, {
+      
+      const res = await fetchApi(`/mensajeria/${mensajeSeleccionado.id}/responder`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(textoRespuesta) // <-- Enviamos el texto real
+        body: JSON.stringify(textoRespuesta) 
       });
 
       if (res.ok) {
         cerrarModal();
-        cargarMensajes(); // Recargamos la lista para ver el cambio
+        cargarMensajes(); 
       } else {
         alert("Error al enviar la respuesta.");
       }
@@ -148,7 +149,7 @@ function AdminMensajes() {
         </div>
       </div>
 
-      {/* --- MODAL DE RESPUESTA (Bootstrap) --- */}
+      
       {mensajeSeleccionado && (
         <>
           <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>

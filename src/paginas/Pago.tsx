@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { fetchApi } from '../servicios/api';
 
 interface PagoProps {
   totalPedido: number;
@@ -17,7 +18,7 @@ function Pago({ totalPedido }: PagoProps) {
   const manejarPago = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
+    
     if (tarjeta.trim() === '') {
       alert('Debe ingresar el número de tarjeta.');
       return;
@@ -66,7 +67,7 @@ function Pago({ totalPedido }: PagoProps) {
 
     try {
       setCargando(true);
-      const respuesta = await fetch('http://localhost:8088/api/pagos', {
+      const respuesta = await fetchApi('/pagos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,9 +82,9 @@ function Pago({ totalPedido }: PagoProps) {
         if (pagoRealizado.estado === 'APROBADO') {
           localStorage.setItem('ultimoTotal', totalPedido.toString());
           
-          // --- INICIO DE LA LLAMADA A DESPACHO (PUERTO 8086) ---
+          
           try {
-            const despachoResponse = await fetch('http://localhost:8088/api/despacho', {
+            const despachoResponse = await fetchApi('/despacho', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json',
                           'Authorization': `Bearer ${token}`
@@ -100,7 +101,7 @@ function Pago({ totalPedido }: PagoProps) {
           } catch (err) {
             console.error("Error de red al generar despacho:", err);
           }
-          // --- FIN DE LA LLAMADA A DESPACHO ---
+          
 
           navigate('/boleta');
         } else {

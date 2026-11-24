@@ -11,10 +11,10 @@ function FormularioRegistro() {
   const [password, setPassword] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState("");
   const [direccion, setDireccion] = useState("");
-  const [errorMensaje, setErrorMensaje] = useState(""); // Para mostrar errores del backend
+  const [errorMensaje, setErrorMensaje] = useState(""); 
   const navigate = useNavigate();
 
-  // Cambiamos a async para usar await
+  
   const manejarEnvio = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMensaje("");
@@ -22,7 +22,7 @@ function FormularioRegistro() {
     const correoLimpio = correo.trim().toLowerCase();
     const passwordLimpia = password.trim();
 
-    // --- TUS VALIDACIONES SE MANTIENEN IGUAL ---
+    
     if (!run.trim()) {
       alert("Debe ingresar su RUN.");
       return;
@@ -86,7 +86,7 @@ function FormularioRegistro() {
       return;
     }
 
-    // --- CONEXIÓN AL BACKEND (SPRING BOOT) ---
+    
     try {
       const respuesta = await fetch("http://localhost:8088/api/usuarios/registro", {
         method: "POST",
@@ -105,11 +105,11 @@ function FormularioRegistro() {
       });
 
       if (respuesta.ok) {
-        // El backend responde con status 200
+        
         alert("¡Registro exitoso! Por favor, inicia sesión.");
         navigate("/login");
       } else {
-        // Si el backend responde con error (ej: correo duplicado)
+        
         setErrorMensaje("Error al registrar. El correo o RUN ya podrían estar en uso.");
       }
     } catch (error) {

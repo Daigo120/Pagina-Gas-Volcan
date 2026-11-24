@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { fetchApi } from '../servicios/api';
 
 interface DespachoProps {
   totalPedido: number;
@@ -30,7 +31,7 @@ function Despacho({ totalPedido }: DespachoProps) {
       return;
     }
 
-    // 1. Recuperamos el carrito y el usuario del localStorage
+    
     const carritoString = localStorage.getItem('carrito_pendiente');
     const usuarioString = localStorage.getItem('usuarioLogueado');
 
@@ -43,41 +44,37 @@ function Despacho({ totalPedido }: DespachoProps) {
     const carrito = JSON.parse(carritoString);
     const usuario = JSON.parse(usuarioString);
 
-    // 2. Armamos el JSON directamente (los IDs ya son numéricos)
+    /
     const pedidoPayload = {
       usuarioId: usuario.id,
-      total: totalPedido, // <-- AGREGADO: Viene de las props del componente
-      estado: 'PENDIENTE', // <-- AGREGADO: Estado inicial obligatorio
+      total: totalPedido, 
+      estado: 'PENDIENTE', 
       direccion: direccion.trim(),
       horarioEntrega: horario,
-      notas: notas.trim(), // <-- AGREGADO (Ver punto 2 abajo)
+      notas: notas.trim(), 
       detalles: carrito.map((item: any) => ({
         productoId: item.id, 
         cantidad: item.cantidad
       }))
     };
 
-    // 3. Enviamos al backend (pedidos-service)
+    
     try {
       setCargando(true);
-      const token = localStorage.getItem('token');
-      const respuesta = await fetch('http://localhost:8088/api/pedidos', {
+      
+      const respuesta = await fetchApi('/pedidos', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(pedidoPayload)
       });
 
       if (respuesta.ok) {
         const pedidoCreado = await respuesta.json();
         
-        // Guardamos el ID del pedido y el total para las siguientes pantallas
+       
         localStorage.setItem('pedido_actual_id', pedidoCreado.id.toString());
         localStorage.setItem('pedido_actual_total', pedidoCreado.total.toString());
         
-        // Limpiamos el carrito pendiente
+        
         localStorage.removeItem('carrito_pendiente');
         
         navigate('/pago'); 

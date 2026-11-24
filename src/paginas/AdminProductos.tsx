@@ -24,9 +24,9 @@ function AdminProductos() {
 
   const cargarProductos = async () => {
     try {
-      const token = localStorage.getItem('token'); // <-- TOKEN
+      const token = localStorage.getItem('token'); 
       const res = await fetch('http://localhost:8088/api/productos', {
-        headers: { 'Authorization': `Bearer ${token}` } // <-- TOKEN (opcional si es público)
+        headers: { 'Authorization': `Bearer ${token}` } 
       });
       if (res.ok) {
         const data = await res.json();
@@ -81,7 +81,7 @@ function AdminProductos() {
     };
 
     try {
-      const token = localStorage.getItem('token'); // <-- TOKEN
+      const token = localStorage.getItem('token'); 
       const url = editando 
         ? `http://localhost:8088/api/productos/${idEditando}` 
         : 'http://localhost:8088/api/productos';
@@ -92,7 +92,7 @@ function AdminProductos() {
         method: metodo,
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // <-- TOKEN
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(productoData)
       });
@@ -113,10 +113,10 @@ function AdminProductos() {
   const eliminarProducto = async (id: number) => {
     if (window.confirm(`¿Seguro que deseas eliminar el producto ID ${id}?`)) {
       try {
-        const token = localStorage.getItem('token'); // <-- TOKEN
+        const token = localStorage.getItem('token'); 
         const res = await fetch(`http://localhost:8088/api/productos/${id}`, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` } // <-- TOKEN
+          headers: { 'Authorization': `Bearer ${token}` } 
         });
         if (res.ok) {
           cargarProductos();
@@ -129,7 +129,7 @@ function AdminProductos() {
     }
   };
 
-  // ... (El return de AdminProductos se mantiene igual) ...
+  
   return (
     <div className="container-fluid p-0 position-relative">
       <header className="bg-dark text-white p-3 d-flex justify-content-between align-items-center border-bottom border-warning border-4">

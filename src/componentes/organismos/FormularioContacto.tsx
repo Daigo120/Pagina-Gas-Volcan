@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import CampoFormulario from "../moleculas/CampoFormulario";
+import { fetchApi } from '../../servicios/api';
 
 function FormularioContacto() {
   const [nombre, setNombre] = useState("");
@@ -31,25 +32,25 @@ function FormularioContacto() {
       return;
     }
 
-    // Conexión con el microservicio de mensajería
+    
     try {
       setCargando(true);
       
-      const respuesta = await fetch('http://localhost:8088/api/mensajeria', {
+      const respuesta = await fetchApi('/mensajeria', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           nombre: nombre.trim(),
-          correo: correo.trim().toLowerCase(), // <-- CAMBIADO a 'correo'
+          correo: correo.trim().toLowerCase(), 
           mensaje: mensaje.trim()
         })
       });
 
       if (respuesta.ok) {
         alert("¡Mensaje enviado! El administrador se contactará contigo pronto.");
-        // Limpiamos el formulario
+        
         setNombre("");
         setCorreo("");
         setMensaje("");

@@ -15,9 +15,9 @@ function AdminUsuarios() {
 
   const cargarUsuarios = async () => {
     try {
-      const token = localStorage.getItem('token'); // <-- TOKEN
+      const token = localStorage.getItem('token'); 
       const res = await fetch('http://localhost:8088/api/usuarios', {
-        headers: { 'Authorization': `Bearer ${token}` } // <-- TOKEN
+        headers: { 'Authorization': `Bearer ${token}` } 
       });
       if (res.ok) {
         const data = await res.json();
@@ -66,12 +66,12 @@ function AdminUsuarios() {
     };
 
     try {
-      const token = localStorage.getItem('token'); // <-- TOKEN
+      const token = localStorage.getItem('token'); 
       const res = await fetch(`http://localhost:8088/api/usuarios/${usuarioEditando.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // <-- TOKEN
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(usuarioActualizado)
       });
@@ -92,10 +92,10 @@ function AdminUsuarios() {
   const eliminarUsuario = async (id: number) => {
     if (window.confirm("¿Seguro que deseas eliminar a este usuario?")) {
       try {
-        const token = localStorage.getItem('token'); // <-- TOKEN
+        const token = localStorage.getItem('token'); 
         const res = await fetch(`http://localhost:8088/api/usuarios/${id}`, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` } // <-- TOKEN
+          headers: { 'Authorization': `Bearer ${token}` } 
         });
         if (res.ok) {
           cargarUsuarios();
@@ -108,7 +108,7 @@ function AdminUsuarios() {
     }
   };
 
-  // ... (El return de AdminUsuarios se mantiene igual, no lo toco para no hacer el mensaje eterno) ...
+ 
   return (
     <div className="container-fluid p-0 position-relative">
       <header className="bg-dark text-white p-3 d-flex justify-content-between align-items-center border-bottom border-warning border-4">

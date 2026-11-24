@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { fetchApi } from '../servicios/api';
 
 interface BoletaDB {
   id: number;
@@ -10,7 +11,7 @@ interface BoletaDB {
   detalleJson: string;
 }
 
-// Interfaz para los productos dentro de la boleta
+
 interface DetalleItem {
   productoId: number;
   cantidad: number;
@@ -38,7 +39,7 @@ function Boleta() {
 
       try {
         const token = localStorage.getItem('token');
-        const respuesta = await fetch('http://localhost:8088/api/boletas', {
+        const respuesta = await fetchApi('/boletas', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}` },
@@ -91,7 +92,7 @@ function Boleta() {
   const iva = totalFinal - neto;
   const fechaActual = new Date(boleta.fechaEmision).toLocaleString('es-CL');
 
-  // Parseamos el JSON de detalles que viene del backend
+  
   let detallesParseados: DetalleItem[] = [];
   try {
     if (boleta.detalleJson) {

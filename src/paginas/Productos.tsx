@@ -60,10 +60,10 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
     <div className="container mt-4 mb-5">
       <h1 className="text-center mb-4">Productos - Gas El Volcán</h1>
 
-      {/* Usamos una fila (row) para dividir la pantalla */}
+      
       <div className="row">
         
-        {/* COLUMNA IZQUIERDA: Los Productos (ocupa 8 columnas en PC, 12 en móvil) */}
+        
         <div className="col-12 col-lg-8">
           <div className="row g-3">
             {productosDB.map((prod) => (

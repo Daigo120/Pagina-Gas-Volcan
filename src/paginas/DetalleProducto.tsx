@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-// 1. Definimos la interfaz con los campos que devuelve tu backend de Spring Boot
+
 interface Producto {
   id: number;
   nombre: string;
   descripcion: string;
   precio: number;
   stock: number;
-  imagenUrl: string; // Ojo: en tu tabla SQL se llama 'imagen_url', pero Spring lo mapea a 'imagenUrl' por defecto
+  imagenUrl: string; 
 }
 
 function DetalleProducto() {
-  const { id } = useParams(); // Este 'id' viene de la URL (ej: /producto/1)
+  const { id } = useParams(); 
   const [producto, setProducto] = useState<Producto | null>(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
@@ -23,7 +23,7 @@ function DetalleProducto() {
 
       try {
         setCargando(true);
-        // 2. Hacemos la petición al microservicio de Productos (Puerto 8082)
+       
         const respuesta = await fetch(`http://localhost:8088/api/productos/${id}`);
         
         if (respuesta.ok) {
@@ -60,8 +60,7 @@ function DetalleProducto() {
     );
   }
 
-  // 3. Si tu base de datos no tiene la imagen, usamos una por defecto
-  // (Puedes mantener tu lógica de imágenes locales si quieres, pero lo ideal es usar producto.imagenUrl)
+  
   const imagenFinal = `/${producto.imagenUrl}`; 
 
   return (
