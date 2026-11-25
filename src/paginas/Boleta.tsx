@@ -132,7 +132,7 @@ function Boleta() {
             </tr>
           </thead>
           <tbody>
-            {/* Si por alguna razón no hay detalles, mostramos un texto genérico */}
+            
             {detallesParseados.length === 0 && (
               <tr>
                 <td>Compra de Productos Gas El Volcán (Pedido #{boleta.pedidoId})</td>
@@ -140,7 +140,7 @@ function Boleta() {
               </tr>
             )}
 
-            {/* Recorremos los productos y los pintamos */}
+            
             {detallesParseados.map((item, index) => (
               <tr key={index}>
                 <td>

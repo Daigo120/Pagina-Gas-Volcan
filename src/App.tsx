@@ -60,6 +60,7 @@ function App() {
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuarioLogueado');
+    localStorage.removeItem('token');
     setUsuarioLogueado(null);
   };
 
@@ -102,7 +103,7 @@ function App() {
           <Route path="/despacho" element={<Despacho totalPedido={totalPedido} />} />
           <Route path="/pago" element={<Pago totalPedido={totalPedido} />} />
           
-          {/* CORREGIDO: Boleta ya no recibe totalPedido como prop */}
+          
           <Route path="/boleta" element={<Boleta />} />
           
           <Route path="/login" element={<Login setUsuarioLogueado={setUsuarioLogueado} />} />

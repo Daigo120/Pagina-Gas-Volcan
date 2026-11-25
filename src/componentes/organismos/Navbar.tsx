@@ -44,7 +44,7 @@ function Navbar({ usuarioLogueado, onCerrarSesion }: NavbarProps) {
             <Link className="nav-link text-white" to="/nosotros" onClick={cerrarMenu}>Nosotros</Link>
             <Link className="nav-link text-white" to="/donde-encontrarnos" onClick={cerrarMenu}>Dónde Encontrarnos</Link>
 
-            {/* CORREGIDO: Ahora validamos el campo 'rol' con el valor 'ADMIN' */}
+            
             {usuarioLogueado && usuarioLogueado.rol === 'ADMIN' && (
               <Link className="nav-link text-warning fw-bold" to="/admin" onClick={cerrarMenu}>
                 Panel Admin

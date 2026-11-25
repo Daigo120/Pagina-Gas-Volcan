@@ -11,7 +11,7 @@ function Admin() {
         <h2 className="mb-4 fw-bold">Módulos de Gestión</h2>
         <div className="row">
           
-          {/* Módulo de Productos */}
+          
           <div className="col-md-4 mb-4">
             <div className="card shadow-sm text-center p-4 h-100">
               <h3 className="card-title fw-bold">Mantenedor de Productos</h3>

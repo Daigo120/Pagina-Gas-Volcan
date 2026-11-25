@@ -120,7 +120,7 @@ function FormularioRegistro() {
 
   return (
     <form onSubmit={manejarEnvio} noValidate>
-      {/* Mostramos el error si el backend falla */}
+      
       {errorMensaje && <div className="alert alert-danger">{errorMensaje}</div>}
 
       <div className="row">

@@ -44,7 +44,7 @@ function Despacho({ totalPedido }: DespachoProps) {
     const carrito = JSON.parse(carritoString);
     const usuario = JSON.parse(usuarioString);
 
-    /
+    
     const pedidoPayload = {
       usuarioId: usuario.id,
       total: totalPedido, 

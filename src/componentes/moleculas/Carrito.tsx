@@ -20,7 +20,7 @@ function Carrito({ items, onQuitarItem, onFinalizar }: CarritoProps) {
     <div className="card shadow-sm border-0 mx-auto" style={{ maxWidth: '400px' }}>
       <div className="card-header bg-dark text-white fw-bold py-3 d-flex justify-content-between align-items-center">
         <span>Mi Carrito de Compras</span>
-        {/* Mostramos cuántos productos hay en total */}
+        
         <span className="badge bg-warning text-dark">
           {items.reduce((acc, item) => acc + item.cantidad, 0)} items
         </span>
@@ -41,12 +41,12 @@ function Carrito({ items, onQuitarItem, onFinalizar }: CarritoProps) {
                 <div>
                   <h6 className="fw-bold mb-0 text-dark">{item.nombre}</h6>
                   
-                  {/* AQUÍ SE MUESTRA LA CANTIDAD Y EL PRECIO UNITARIO */}
+                 
                   <small className="text-muted">
                     {item.cantidad} x ${item.precio.toLocaleString('es-CL')}
                   </small>
                   
-                  {/* AQUÍ SE MUESTRA EL SUBTOTAL POR PRODUCTO */}
+                  
                   <div className="fw-bold text-success small mt-1">
                     Subtotal: ${(item.precio * item.cantidad).toLocaleString('es-CL')}
                   </div>

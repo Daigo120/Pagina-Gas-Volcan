@@ -82,9 +82,9 @@ function Productos({ carrito, setTotalPedido, onAgregar, onQuitar }: ProductosPr
           </div>
         </div>
 
-        {/* COLUMNA DERECHA: El Carrito (ocupa 4 columnas en PC, 12 en móvil) */}
+        
         <div className="col-12 col-lg-4 mt-4 mt-lg-0">
-          {/* La clase 'sticky-top' hace que el carrito te siga mientras haces scroll */}
+          
           <div className="sticky-top" style={{ top: '20px', zIndex: 10 }}>
             <Carrito 
               items={carrito} 
